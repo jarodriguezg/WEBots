@@ -1,0 +1,57 @@
+#header		{ background-color: #003300;
+			  padding: 0px 20px;
+			  font-weight: bold;
+			}
+
+.navbar-toggle	{ border-color: white !important; 
+				  color: white; }
+.navbar	{ margin-bottom: 0px !important;}
+.navbar-text { color: white; }
+#logo	{ margin-top: 6px; }
+
+ul>li>a 	{ color: white; }
+
+ul>li>a:hover 	{ color: #003300; }
+
+#btnregistro	{ color: white;
+			  	  background-color: #004d00;
+			  	  font-weight: bold;
+				}
+
+#btnregistro:hover	{ background-color: #007429; }
+
+#section	{ padding: 60px 0px; }
+
+#footer		{ background-color: #003300;
+			  color: white;
+			  text-align: center;
+			  padding: 5px;
+			}
+
+#acceso		{ margin-bottom: 10px !important; }
+
+.mensajes	{ text-align: center;
+			  font-size: 12px;
+			  position: fixed;
+			  z-index: 1; /* Coloca elemento en primer plano (Valor por defecto: 0) */
+			}
+
+.centrar-texto	{ text-align: center; }
+
+#btnMenuUsuario	{ color: white; 
+				  border-color: white;
+				  text-align: right;
+			  	  background-color: #003300;
+			  	  font-weight: bold;
+			  	  padding: 14px 20px;
+				}
+#btnMenuUsuario:hover	{ color: #003300; 
+			  	  		  background-color: #007429;
+						}
+
+.dropdown-menu	{ background-color: #003300 !important; }
+.dropdown-menu > li 	{ text-align: right; }
+.dropdown-menu > li > a { color: white !important; }
+.dropdown-menu > li > a:hover { color: #003300 !important; }
+ul > li > a > span.glyphicon	{ padding-right: 5px; }
+.glyphicon-menu-down	{ padding-left: 15px; }

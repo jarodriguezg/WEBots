@@ -1,0 +1,15 @@
+.container{
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+
+#subtitulo {
+	font-size: 22px;
+	color: #003300;
+}
+
+.btn-success { margin-bottom: 10px !important; }
+
+.centrar-texto{
+	text-align: center;
+}

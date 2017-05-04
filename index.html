@@ -1,0 +1,118 @@
+<?php
+	# Propagación de sesiones
+	include_once ("include/inicia_ses.inc.php");
+	include_once ("include/acceso.inc.php");
+
+	estado_registro();
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>WeBots - Inicio</title>
+
+	<link rel="stylesheet" type="text/css" href="css/index.css">
+	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<!-- Latest compiled JavaScript -->
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<!-- Comportamiento acceso desde ventana Modal -->
+	<script type="text/JavaScript" src="scripts/acceso.js"></script>
+	<!-- Comportamiento mensajes de alerta (tanto de error como de éxito) -->
+	<script type="text/JavaScript" src="scripts/alertas.js"></script>
+</head>
+
+<body>
+	<?php 	validar_datosacceso();
+			acceso_usuario(); ?>
+	<div id="header">
+		<div class="container-fluid">
+		<div class="row">
+		<div class="col-xs-offset-1 col-xs-11 
+					col-sm-offset-1 col-sm-10 
+					col-md-offset-1 col-md-10
+					col-lg-offset-2 col-lg-8">
+				
+		<nav class="navbar">
+  			<div class="container-fluid">
+  			<div class="row">
+				<div class="col-sm-9 col-md-8 col-lg-8">
+    			<div class="navbar-header">
+      				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#BarraNav">
+      					<span class="sr-only"></span>
+        				<span class="glyphicon glyphicon-menu-hamburger"></span>
+       				</button>
+      				<div id="logo">
+						<span> 	
+							<a href="index.html"> <img src="images/logo.png" alt="WeBots"> </a>
+						</span>
+					</div>
+   				</div>
+    
+	    		<div class="collapse navbar-collapse" id="BarraNav">
+	    			<p class="navbar-text">¡Enfrenta a tus Bots!</p>
+	    		</div>
+	    		</div>
+	    		<div id="btnusuario" class="col-sm-3 col-md-4 col-lg-4">
+	      			<!-- Botón a ventana modal -->
+					<button type="button" class="btn navbar-btn navbar-right" id="btnregistro"
+							data-toggle="modal" data-target="#VModal">
+						Ingresar</button>
+
+					<!-- Ventana Modal -->
+					<div id="VModal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="VentanaModal">
+  						<div class="modal-dialog modal-sm">
+    						<div class="modal-content">
+      							<div class="modal-header">
+        							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        							<h4 class="modal-title" id="VentanaModal">¡Bienvenidos a WeBots!</h4>
+      							</div>
+      							<div class="modal-body">
+        							Hola, en esta página podrás realizar pruebas contra otros Bots.<br> 
+        							¡Animate a probar tu código!
+      							</div>
+      							<div class="modal-footer">
+      								<button id="registro" type="button" class="btn btn-success"
+      										onclick="formulario();">Registrarse</button>
+        							<button id="ingreso" type="button" class="btn btn-success"
+        									onclick="ingreso();">Ingresar</button>
+      							</div>
+    						</div>
+  						</div>
+					</div>
+				</div> 
+			</div> <!-- final de .row -->
+  			</div> <!-- final de .container-fluid -->
+		</nav>
+		</div> <!-- final de .col-?-? -->
+		</div> <!-- final de .row -->
+		</div> <!-- final de .container-fluid -->
+	</div>
+
+	<div id="section">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-xs-offset-1 col-xs-11 
+							col-sm-offset-1 col-sm-10 
+							col-md-offset-2 col-md-8
+							col-lg-offset-2 col-lg-8">
+					Seccion central	
+				</div>
+	    	</div>
+  		</div>
+	</div>
+
+	<div id="footer">
+		<span class="glyphicon glyphicon-copyright-mark" aria-hidden="true"></span>
+			Jose Antonio Rodriguez Gomez - Universidad de Cádiz (UCA)
+	</div>
+</body>
+</html>
