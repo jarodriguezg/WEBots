@@ -130,7 +130,7 @@
 					$(document).ready(function(){
 				    	$(".navbar-text").before("<ul class=\"nav navbar-nav\">" +
 	        			"<li><a href=\"/WEBots/index.html\">Inicio<span class=\"sr-only\"></span></a></li>" +
- 						"<li><a href=\"#\">Menu</a></li>" +
+ 						"<li><a href=\"/WEBots/html/competicion.html\">Nueva Competición</a></li>" +
   						"<li><a href=\"#\">Función1</a></li>" +
 	      				"</ul>");
 	      				$(".navbar-text").remove();

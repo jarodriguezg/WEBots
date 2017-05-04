@@ -1,0 +1,131 @@
+<?php
+	# Propagación de sesiones
+	include_once ("../include/inicia_ses.inc.php");
+	include_once ("../include/acceso.inc.php");
+
+	if (!isset($_SESSION['DatosUsuario']))
+	{	
+		# Falta mensaje de error que nos indique la prohibición de acceso.
+		# Prohibición acceso a competicion.html sin estar logueado en el sistema.
+		header('Location: ../index.html');
+	}
+
+	estado_registro();
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>WeBots - Nueva Competición</title>
+
+	<link rel="stylesheet" type="text/css" href="../css/index.css">
+	<link rel="stylesheet" type="text/css" href="../css/competicion.css">
+	<link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<!-- Latest compiled JavaScript -->
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+	<?php 	validar_datosacceso();
+			acceso_usuario(); ?>
+	<div id="header">
+		<div class="container-fluid">
+		<div class="row">
+		<div class="col-xs-offset-1 col-xs-11 
+					col-sm-offset-1 col-sm-10 
+					col-md-offset-1 col-md-10
+					col-lg-offset-2 col-lg-8">
+				
+		<nav class="navbar">
+  			<div class="container-fluid">
+  			<div class="row">
+				<div class="col-sm-9 col-md-8 col-lg-8">
+    			<div class="navbar-header">
+      				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#BarraNav">
+      					<span class="sr-only"></span>
+        				<span class="glyphicon glyphicon-menu-hamburger"></span>
+       				</button>
+      				<div id="logo">
+						<span> 	
+							<a href="../index.html"> <img src="../images/logo.png" alt="WeBots"> </a>
+						</span>
+					</div>
+   				</div>
+    
+	    		<div class="collapse navbar-collapse" id="BarraNav">
+	    			<p class="navbar-text">¡Enfrenta a tus Bots!</p>
+	    		</div>
+	    		</div>
+	    		<div id="btnusuario" class="col-sm-3 col-md-4 col-lg-4"></div> 
+			</div> <!-- final de .row -->
+  			</div> <!-- final de .container-fluid -->
+		</nav>
+		</div> <!-- final de .col-?-? -->
+		</div> <!-- final de .row -->
+		</div> <!-- final de .container-fluid -->
+	</div>
+
+	<div id="section">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-xs-offset-1 col-xs-11 
+							col-sm-offset-1 col-sm-10 
+							col-md-offset-2 col-md-8
+							col-lg-offset-2 col-lg-8">
+					<h2 class="centrar-texto">MODELO DE JUEGO: <em>Algoritmos de ordenación</em></h2>
+					<p>La dinámica es sencilla, introduce el código de tu algoritmo de ordenación, elige adversario y comprobaremos qué algoritmo es más eficiente.
+					Una vez finalizada la competición se visualizarán en pantalla los resultados, dichos resultados se almacenarán en un registro de tus competiciones que podrás analizar posteriormente.</p>
+					<p>El proceso para comprobar la eficiencia del algoritmo consiste en realizar la ejecución del siguiente fragmento de código:</p>
+<pre>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;list&gt;			// Bibliotecas necesarias para la implementacion
+#include "algoritmos.h"
+#include "cronometro.h" 	// Incluimos el modulo cronometro
+
+using namespace std;
+int main()
+{
+	srand(time(0));
+	int n = 0;
+	while (n &lt; 20000 || n == 20000)
+	{
+	   	vector &lt;double&gt; v;           	   // Declaramos v de elementos de tipo double
+	   	for (int i=0; i&lt;n; i++)
+	   	{  v.push_back((double)i);   }     // Añadimos i al final del vector  
+	   	random_shuffle(v.begin(),v.end()); // Intercambio de valores
+	   	cronometro c;
+	   	c.activar();                       // Activamos cronometro
+
+		<b>// Código proporcionado por el usuario.</b>
+
+		c.parar();                         // Paramos cronometro
+		double t = c.tiempo();
+		cout &lt;&lt; n &lt;&lt; '\t' &lt;&lt; t &lt;&lt; endl;
+
+		n = n+1000;		
+    }
+}
+</pre>
+					El código básicamente realiza un análisis empírico en el caso promedio del código proporcionado por el usuario, usando permutaciones aleatorias de un vector de números de coma flotante y doble precisión que contenga los n primeros números naturales, donde n variará desde 0 hasta 20000 en incrementos de 1000.
+				</div>
+	    	</div>
+  		</div>
+	</div>
+
+	<div id="footer">
+		<span class="glyphicon glyphicon-copyright-mark" aria-hidden="true"></span>
+			Jose Antonio Rodriguez Gomez - Universidad de Cádiz (UCA)
+	</div>
+</body>
+</html>

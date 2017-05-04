@@ -5,6 +5,7 @@
 
 	if (!isset($_SESSION['DatosUsuario']))
 	{	
+		# Falta mensaje de error que nos indique la prohibición de acceso.
 		# Prohibición acceso a perfil.html sin estar logueado en el sistema.
 		header('Location: ../index.html');
 	}
