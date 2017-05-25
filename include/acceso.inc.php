@@ -130,7 +130,7 @@
 					$(document).ready(function(){
 				    	$(".navbar-text").before("<ul class=\"nav navbar-nav\">" +
 	        			"<li><a href=\"/WEBots/index.html\">Inicio<span class=\"sr-only\"></span></a></li>" +
- 						"<li><a href=\"/WEBots/html/competicion.html\">Nueva Competición</a></li>" +
+ 						"<li><a href=\"/WEBots/html/mostrarcompeticiones.php\">Competiciones</a></li>" +
   						"<li><a href=\"#\">Función1</a></li>" +
 	      				"</ul>");
 	      				$(".navbar-text").remove();
@@ -159,6 +159,76 @@
 					});
 				<?php echo "</script>";
 			}
+		}
+	}
+
+	# Muestra competiciones
+	function mostrar_competiciones()
+	{
+		if ($_SESSION['DatosCompeticiones'] == 0) {
+			# Codigo JS para mostrar competiciones.
+			echo "<script type=\"text/JavaScript\">"; ?>
+				$(document).ready(function(){
+			    	$(".mostrar_competiciones").append("<h4 class=\"centrar-texto\">NO EXISTEN COMPETICIONES</h4>");
+	      		});
+	      	<?php echo "</script>";
+		}
+		else
+		{
+			# Recorremos array PHP para introducir datos en competicion.html con JS.
+			echo "<script type=\"text/JavaScript\">"; ?>
+				$(document).ready(function(){
+					<!-- json_encode(): funcion para convertir array PHP en array JS -->
+					var nom_competicion = <?php echo json_encode($_SESSION['nom_competicion']); ?>;
+					var num_pruebas = <?php echo json_encode($_SESSION['num_pruebas']); ?>;
+
+					$(".mostrar_competiciones").append("<div class=\"row\">");
+					for (i = 0; i < <?php echo $_SESSION['DatosCompeticiones']; ?>; i++) { 
+			    		$(".mostrar_competiciones").append(
+			    		"<div class=\"col-sm-12 col-md-6 col-lg-6\">" +
+							"<div class=\"thumbnail\">" +
+								"<div class=\"caption\">" +
+									"<h4 class=\"centrar-texto\">" + nom_competicion[i] + "  Pruebas: " + num_pruebas[i] + "</h4>" +
+									"<p>Descripción competición</p>" +
+									"<form class=\"form-inline\" enctype=\"multipart/form-data\" action=\"subirfichero.php\" method=\"POST\">" +
+  										"<div class=\"form-group " + nom_competicion[i] + "\">" +
+    										"<label>Envío archivos</label>" +
+    										<!-- Nombre competición para crear carpeta -->
+    										"<input type=\"hidden\" name=\"competicion\" value=\""+ nom_competicion[i] + "\" />" +
+    										<!-- Número de pruebas para crear una carpeta por Prueba -->
+    										"<input type=\"hidden\" name=\"numpruebas\" value=\""+ num_pruebas[i] + "\" />" +
+    										<!-- MAX_FILE_SIZE debe preceder al campo de entrada del fichero -->
+    										"<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"30000\" />");
+									for (j = 0; j < num_pruebas[i]; j++) { 
+			    					$("." + nom_competicion[i] + "").append(
+    										<!-- El nombre del elemento de entrada determina el nombre en el array $_FILES[] -->
+    										"<div class=\"subidafichero\">" +
+    										"<label for=\"" + nom_competicion[i] + "prueba" + (j+1) + "\" class=\"btn btn-file btn-warning\">Examinar</label>" +
+    										"<input id=\"" + nom_competicion[i] + "prueba" + (j+1) + "\" class=\"ficheros\" name=\"fichero_usuario[]\" type=\"file\"/>" + 
+    										"</div>");
+    								}
+  										$("." + nom_competicion[i] + "").after(
+  											"</div>" +
+  										"<input id=\"" + nom_competicion[i] + "\" class=\"btn btn-primary btn-lg btn-block\" type=\"submit\" value=\"¡Participar!\" />" +
+									"</form>" +
+								"</div>" +
+							"</div>" +
+						"</div>"	
+						);
+			    	}
+			    	$(".mostrar_competiciones").append("</div>");
+	      		});
+	      	<?php echo "</script>";
+
+	      	# Deshabilitar botón participar tras participación usuario.
+	      	if (isset($_SESSION['rutacompeticion']))
+	      	{
+	      		echo "<script type=\"text/JavaScript\">"; ?>
+					$(document).ready(function(){
+						alert("Existe RUTA");
+					});
+	      		<?php echo "</script>";
+	      	}
 		}
 	}
 ?>

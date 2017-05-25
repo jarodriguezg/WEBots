@@ -104,7 +104,43 @@
 							col-sm-offset-1 col-sm-10 
 							col-md-offset-2 col-md-8
 							col-lg-offset-2 col-lg-8">
-					Seccion central	
+					<h2 class="centrar-texto">MODELO DE JUEGO: <em>Algoritmos de ordenación</em></h2>
+					<p>La dinámica es sencilla, introduce el código de tu algoritmo de ordenación, elige adversario y comprobaremos qué algoritmo es más eficiente.
+					Una vez finalizada la competición se visualizarán en pantalla los resultados, dichos resultados se almacenarán en un registro de tus competiciones que podrás analizar posteriormente.</p>
+					<p>El proceso para comprobar la eficiencia del algoritmo consiste en realizar la ejecución del siguiente fragmento de código:</p>
+<pre>
+<b>#include "algoritmo.h"		// Fichero propocionado por el usuario. </b>
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+#include &lt;vector&gt;
+#include &lt;list&gt;			// Bibliotecas necesarias para la implementacion
+#include "cronometro.h" 	// Incluimos el modulo cronometro
+
+using namespace std;
+int main()
+{
+	srand(time(0));
+	int n = 0;
+	while (n &lt; 20000 || n == 20000)
+	{
+	   	vector &lt;double&gt; v;           	   // Declaramos v de elementos de tipo double
+	   	for (int i=0; i&lt;n; i++)
+	   	{  v.push_back((double)i);   }     // Añadimos i al final del vector  
+	   	random_shuffle(v.begin(),v.end()); // Intercambio de valores
+	   	cronometro c;
+	   	c.activar();                       // Activamos cronometro
+
+		<b>medireficiencia(v.begin(),v.end()); // Función proporcionada por el usuario</b>
+
+		c.parar();                         // Paramos cronometro
+		double t = c.tiempo();
+		cout &lt;&lt; n &lt;&lt; '\t' &lt;&lt; t &lt;&lt; endl;
+
+		n = n+1000;		
+    }
+}
+</pre>
+					El código básicamente realiza un análisis empírico en el caso promedio del código proporcionado por el usuario, usando permutaciones aleatorias de un vector de números de coma flotante y doble precisión que contenga los n primeros números naturales, donde n variará desde 0 hasta 20000 en incrementos de 1000.
 				</div>
 	    	</div>
   		</div>

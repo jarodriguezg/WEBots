@@ -1,0 +1,39 @@
+.thumbnail {
+	background-image: url("../images/fondocompeticiones.png");
+}
+
+.caption {
+	color: white !important;
+}
+
+.form-group {
+	padding-bottom: 150px;
+}
+
+.subidafichero	{
+	position: relative;
+	margin-bottom: 50px;
+}
+
+.btn-file	{
+	max-width: none;
+	width: 102px;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 1;
+}
+
+.ficheros {
+	position: absolute;
+	top: 3px;
+	left: 0px;
+	text-align: left;
+	z-index: 0;
+}
+
+.nombrefichero	{
+	position: relative;
+	left: 105px;
+	top: 7px;
+}
