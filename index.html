@@ -105,11 +105,10 @@
 							col-md-offset-2 col-md-8
 							col-lg-offset-2 col-lg-8">
 					<h2 class="centrar-texto">MODELO DE JUEGO: <em>Algoritmos de ordenación</em></h2>
-					<p>La dinámica es sencilla, introduce el código de tu algoritmo de ordenación, elige adversario y comprobaremos qué algoritmo es más eficiente.
-					Una vez finalizada la competición se visualizarán en pantalla los resultados, dichos resultados se almacenarán en un registro de tus competiciones que podrás analizar posteriormente.</p>
+					<p>Una vez finalizada la competición se visualizarán en pantalla los resultados, dichos resultados se almacenarán en un registro de tus competiciones que podrás analizar posteriormente.</p>
 					<p>El proceso para comprobar la eficiencia del algoritmo consiste en realizar la ejecución del siguiente fragmento de código:</p>
 <pre>
-<b>#include "algoritmo.h"		// Fichero propocionado por el usuario. </b>
+<b>#include "algoritmo.h"		// Fichero proporcionado por el usuario. </b>
 #include &lt;iostream&gt;
 #include &lt;algorithm&gt;
 #include &lt;vector&gt;
@@ -123,16 +122,16 @@ int main()
 	int n = 0;
 	while (n &lt; 20000 || n == 20000)
 	{
-	   	vector &lt;double&gt; v;           	   // Declaramos v de elementos de tipo double
+	   	vector &lt;double&gt; v;           	   	// Declaramos v de elementos de tipo double
 	   	for (int i=0; i&lt;n; i++)
-	   	{  v.push_back((double)i);   }     // Añadimos i al final del vector  
-	   	random_shuffle(v.begin(),v.end()); // Intercambio de valores
+	   	{  v.push_back((double)i);   }     	// Añadimos i al final del vector  
+	   	random_shuffle(v.begin(),v.end()); 	// Intercambio de valores
 	   	cronometro c;
-	   	c.activar();                       // Activamos cronometro
+	   	c.activar();                       	// Activamos cronometro
 
-		<b>medireficiencia(v.begin(),v.end()); // Función proporcionada por el usuario</b>
+		<b>medireficiencia(v.begin(),v.end()); 	// Función proporcionada por el usuario</b>
 
-		c.parar();                         // Paramos cronometro
+		c.parar();                         	// Paramos cronometro
 		double t = c.tiempo();
 		cout &lt;&lt; n &lt;&lt; '\t' &lt;&lt; t &lt;&lt; endl;
 

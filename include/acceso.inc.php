@@ -165,7 +165,7 @@
 	# Muestra competiciones
 	function mostrar_competiciones()
 	{
-		if ($_SESSION['DatosCompeticiones'] == 0) {
+		if ($_SESSION['NumCompeticiones'] == 0) {
 			# Codigo JS para mostrar competiciones.
 			echo "<script type=\"text/JavaScript\">"; ?>
 				$(document).ready(function(){
@@ -183,14 +183,14 @@
 					var num_pruebas = <?php echo json_encode($_SESSION['num_pruebas']); ?>;
 
 					$(".mostrar_competiciones").append("<div class=\"row\">");
-					for (i = 0; i < <?php echo $_SESSION['DatosCompeticiones']; ?>; i++) { 
+					for (i = 0; i < <?php echo $_SESSION['NumCompeticiones']; ?>; i++) { 
 			    		$(".mostrar_competiciones").append(
 			    		"<div class=\"col-sm-12 col-md-6 col-lg-6\">" +
 							"<div class=\"thumbnail\">" +
 								"<div class=\"caption\">" +
 									"<h4 class=\"centrar-texto\">" + nom_competicion[i] + "  Pruebas: " + num_pruebas[i] + "</h4>" +
 									"<p>Descripción competición</p>" +
-									"<form class=\"form-inline\" enctype=\"multipart/form-data\" action=\"subirfichero.php\" method=\"POST\">" +
+									"<form class=\"form-inline subirfichero\" enctype=\"multipart/form-data\" action=\"subirfichero.php\" method=\"POST\">" +
   										"<div class=\"form-group " + nom_competicion[i] + "\">" +
     										"<label>Envío archivos</label>" +
     										<!-- Nombre competición para crear carpeta -->
@@ -209,7 +209,7 @@
     								}
   										$("." + nom_competicion[i] + "").after(
   											"</div>" +
-  										"<input id=\"" + nom_competicion[i] + "\" class=\"btn btn-primary btn-lg btn-block\" type=\"submit\" value=\"¡Participar!\" />" +
+  										"<input id=\"" + nom_competicion[i] + "btn-participar\" class=\"btn btn-primary btn-lg btn-block\" type=\"submit\" value=\"¡Participar!\" />" +
 									"</form>" +
 								"</div>" +
 							"</div>" +
@@ -220,15 +220,27 @@
 	      		});
 	      	<?php echo "</script>";
 
-	      	# Deshabilitar botón participar tras participación usuario.
-	      	if (isset($_SESSION['rutacompeticion']))
-	      	{
+	      	# Deshabilitar botón participar de las competiciones en las que el usuario ya ha participado.
+	      	for($i = 0; $i < count($_SESSION['competicionrealizada']); $i++) 
+			{
 	      		echo "<script type=\"text/JavaScript\">"; ?>
 					$(document).ready(function(){
-						alert("Existe RUTA");
+						$("#<?php echo $_SESSION['competicionrealizada'][$i]; ?>btn-participar").attr("disabled", "true");
+						$(".<?php echo $_SESSION['competicionrealizada'][$i]; ?>").before("<h3 class=\"centrar-texto\">YA HAS PARTICIPADO EN ESTA COMPETICIÓN</h3>");
+						$(".<?php echo $_SESSION['competicionrealizada'][$i]; ?>").remove();
 					});
 	      		<?php echo "</script>";
-	      	}
+			}
+
+			if (isset($_SESSION['ErrorFichero'])) {
+				echo 	"<div class=\"mensajes alert alert-danger alert-dismissible\" role=\"alert\">
+ 					 		<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">
+ 					 		<span aria-hidden=\"true\">&times;</span></button>
+  								<strong>Subir Ficheros -</strong> ".$_SESSION['ErrorFichero']."
+						</div>";
+				unset($_SESSION['ErrorFichero']);
+
+			}
 		}
 	}
 ?>

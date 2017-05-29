@@ -4,7 +4,7 @@ $(document).ready(function(){
 	$("#eliminarusuario").click(function(){
 		var res = confirm("¿Seguro que quieres eliminar el usuario?");
 		if (res == true)
-		{	location.href = "../html/eliminar_usuario.php";	}
+		{	location.href = "../html/eliminar_usuario.php";		}
 	});
 
 	$("#regfinal").submit(function(){
