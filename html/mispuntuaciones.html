@@ -6,7 +6,7 @@
 	if (!isset($_SESSION['DatosUsuario']))
 	{	
 		# Falta mensaje de error que nos indique la prohibición de acceso.
-		# Prohibición acceso a competicion.html sin estar logueado en el sistema.
+		# Prohibición acceso a mispuntuaciones.html sin estar logueado en el sistema.
 		header('Location: ../index.html');
 	}
 
@@ -19,10 +19,10 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>WeBots - Competiciones</title>
+	<title>WeBots - Mis Puntuaciones</title>
 
 	<link rel="stylesheet" type="text/css" href="../css/index.css">
-	<link rel="stylesheet" type="text/css" href="../css/mcompeticion.css">
+	<link rel="stylesheet" type="text/css" href="../css/estilotablas.css">
 	<link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -39,7 +39,7 @@
 <body>
 	<?php 	validar_datosacceso();
 			acceso_usuario(); 
-			mostrar_competiciones();?>
+			mostrar_mispuntuaciones();?>
 	<div id="header">
 		<div class="container-fluid">
 		<div class="row">
@@ -84,7 +84,7 @@
 							col-sm-offset-1 col-sm-10 
 							col-md-offset-2 col-md-8
 							col-lg-offset-2 col-lg-8
-							mostrar_competiciones">
+							mostrar_mispuntuaciones">
 				</div>
 	    	</div>
   		</div>

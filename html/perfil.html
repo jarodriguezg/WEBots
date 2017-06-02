@@ -38,7 +38,8 @@
 	<script type="text/JavaScript" src="../scripts/alertas.js"></script>
 </head>
 <body>		
-	<?php 	acceso_usuario(); ?>		
+	<?php 	acceso_usuario(); 
+			validar_nombreusuario(); ?>		
 	<div id="header">
 		<div class="container-fluid">
 		<div class="row">
@@ -99,6 +100,10 @@
 						<div class="alert alert-info"><strong>Modificar perfil: </strong>
 					 		Los cambios realizados en los campos elegidos por el usuario se
 					 		harán efectivos cuando se vuelva a acceder al sistema.
+						</div>
+						<div class="form-group">
+					    	<label>Nombre Usuario:</label>
+					    	<input type="text" name="nombreusuario" id="nombreusuario" class="form-control">
 						</div>
 						<div class="form-group">
 					    	<label>Nombre:</label>

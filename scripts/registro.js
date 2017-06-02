@@ -5,7 +5,7 @@ function info_errores(campo, selector){
 }
 
 $(document).ready(function(){
-	$("#nombre").select();
+	$("#nombreusuario").select();
 
 	$("#regfinal").submit(function(){
 		// Eliminamos mensajes de alerta (Evitar adicción de más de uno).
@@ -15,12 +15,19 @@ $(document).ready(function(){
 
 		var formulario = this;
 
+		var nombreusuario = formulario.nombreusuario.value;
 		var nombre = formulario.nombre.value;
 		var apellido = formulario.ap.value;
 		var clave = formulario.clave.value;
 		var clave2 = formulario.clave2.value;
 
 		// Buscar forma de que aparezcan todos los errores tras SUBMIT.
+		if(nombreusuario == "")
+		{
+			formulario.nombreusuario.select();
+			info_errores("Nombre Usuario", "#nombreusuario");
+			return false;
+		}
 		if(nombre == "")
 		{
 			formulario.nombre.select();
@@ -45,6 +52,15 @@ $(document).ready(function(){
 		{
 			formulario.clave2.select();
 			info_errores("Contraseña", "#clave2");
+			return false;
+		}
+
+		if(nombreusuario.length >= 15)
+		{
+			formulario.nombreusuario.select();
+			$("#nombreusuario").after("<div class=\"alert alert-warning\">" +
+							  "<strong>Nombre Usuario -</strong> Contiene mas de 15 caracteres" +
+						   	  "</div>");
 			return false;
 		}
 

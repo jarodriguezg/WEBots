@@ -27,8 +27,24 @@
 				<?php
 			}	?>
 				});
-				<?php echo "</script>";
+			<?php echo "</script>";
 			unset($_SESSION['OKdatos']);
+		}
+	}
+
+	function validar_nombreusuario() {
+		if (isset($_SESSION['ExisteNomUsuario']))
+		{
+			echo "<script type=\"text/JavaScript\">"; ?>
+				$(document).ready(function(){
+					$("#nombreusuario").val("<?php echo $_SESSION['NombreUsuario'] ?>");
+					$("#nombreusuario").select();
+					$("#nombreusuario").after(	"<div class=\"alert alert-warning\">" +
+						"<strong>Nombre Usuario: <?php echo $_SESSION['NombreUsuario'] ?> -</strong> YA se encuentra registrado en el sistema. Pruebe otro nombre distinto." +
+						"</div>");
+				});
+			<?php echo "</script>";
+			unset($_SESSION['ExisteNomUsuario']);
 		}
 	}
 
@@ -131,7 +147,7 @@
 				    	$(".navbar-text").before("<ul class=\"nav navbar-nav\">" +
 	        			"<li><a href=\"/WEBots/index.html\">Inicio<span class=\"sr-only\"></span></a></li>" +
  						"<li><a href=\"/WEBots/html/mostrarcompeticiones.php\">Competiciones</a></li>" +
-  						"<li><a href=\"#\">Función1</a></li>" +
+  						"<li><a href=\"/WEBots/html/mostrarpuntuaciones.php\">Puntuaciones</a></li>" +
 	      				"</ul>");
 	      				$(".navbar-text").remove();
 
@@ -146,7 +162,12 @@
     						"<li><a id=\"editarusuario\" href=\"/WEBots/html/perfil.html\">" +
     						"<span class=\"glyphicon glyphicon-pencil\" aria-hidden=\"true\"></span> Editar Usuario" +
     						"</a></li>" +
-    						"<li><a href=\"#\">Another action</a></li>" +
+    						"<li><a href=\"/WEBots/html/mostrarmiscompeticiones.php\">" +
+    						"<span class=\"glyphicon glyphicon-tower\" aria-hidden=\"true\"></span> Mis Competiciones" +
+    						"</a></li>" +
+    						"<li><a href=\"/WEBots/html/mostrarmispuntuaciones.php\">" +
+    						"<span class=\"glyphicon glyphicon-sort-by-order\" aria-hidden=\"true\"></span> Mis Puntuaciones" +
+    						"</a></li>" +
     						"<li role=\"separator\" class=\"divider\"></li>" +
     						"<li><a href=\"/WEBots/html/procesa_cierre.php\">" +
     						"<span class=\"glyphicon glyphicon-off\" aria-hidden=\"true\"></span> Cerrar Sesión" +
@@ -162,7 +183,7 @@
 		}
 	}
 
-	# Muestra competiciones
+	# Muestra todas las competiciones.
 	function mostrar_competiciones()
 	{
 		if ($_SESSION['NumCompeticiones'] == 0) {
@@ -234,13 +255,172 @@
 
 			if (isset($_SESSION['ErrorFichero'])) {
 				echo 	"<div class=\"mensajes alert alert-danger alert-dismissible\" role=\"alert\">
- 					 		<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">
- 					 		<span aria-hidden=\"true\">&times;</span></button>
-  								<strong>Subir Ficheros -</strong> ".$_SESSION['ErrorFichero']."
-						</div>";
+ 				 			<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">
+ 				 			<span aria-hidden=\"true\">&times;</span></button>";
+ 				 			for ($prueba = 0; $prueba < $_SESSION['PruebasCompeticion']; $prueba++)
+ 				 			{	
+ 				 				if(isset($_SESSION['ErrorFichero'][$prueba]))
+ 				 				{	echo "<div><strong>Subir Ficheros Prueba".($prueba + 1)." -</strong> ".$_SESSION['ErrorFichero'][$prueba]."</div>";	}
+ 				 			}
+  				echo  	"</div>";
 				unset($_SESSION['ErrorFichero']);
-
+				unset($_SESSION['PruebasCompeticion']);
 			}
+		}
+	}
+
+	# Muestra los datos de las competiciones en las que ha participado el usuario.
+	function mostrar_miscompeticiones()
+	{
+		if ($_SESSION['NumCompeticionesUsuario'] == 0) {
+			# Codigo JS para mostrar competiciones.
+			echo "<script type=\"text/JavaScript\">"; ?>
+				$(document).ready(function(){
+			    	$(".mostrar_miscompeticiones").append("<h4 class=\"centrar-texto\">NO EXISTEN COMPETICIONES</h4>");
+	      		});
+	      	<?php echo "</script>";
+		}
+		else
+		{
+			# Recorremos array PHP para introducir datos en puntuaciones.html con JS.
+			echo "<script type=\"text/JavaScript\">"; ?>
+				$(document).ready(function(){
+					<!-- json_encode(): funcion para convertir array PHP en array JS -->
+					var CompeticionUsuario = <?php echo json_encode($_SESSION['competicion']); ?>;
+					var PuntuacionUsuario = <?php echo json_encode($_SESSION['puntuacioncomp']); ?>;
+
+					$(".mostrar_miscompeticiones").append("<div class=\"row\">" +
+						"<div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-offset-3 col-lg-6\">" +
+							"<table id=\"MisCompeticiones\" class=\"table\">" +
+							"<caption><h4>Mis Competiciones</h4></caption>" +
+		  						"<tr id=\"filacabecera\">" +
+		    						"<th>Nombre Competicion</th>" +
+		    						"<th>Puntuación</th>" +
+		  						"</tr>");
+		  				for (i = 0; i < <?php echo $_SESSION['NumCompeticionesUsuario']; ?>; i++) {
+		  					$("#MisCompeticiones").append(
+					 			"<tr>" +
+		    						"<td>" + CompeticionUsuario[i] + "</td>" +
+		    						"<td>" + PuntuacionUsuario[i] + "</td>" +
+		  						"</tr>" +
+		  					"</table>");
+					}
+			    $(".mostrar_miscompeticiones").append("</div>");
+	      	});
+	      	<?php echo "</script>";
+		}
+	}
+
+
+	# Muestra todas las puntuaciones de cada competición.
+	function mostrar_puntuaciones()
+	{
+		if ($_SESSION['NumCompeticiones'] == 0) {
+			# Codigo JS para mostrar competiciones.
+			echo "<script type=\"text/JavaScript\">"; ?>
+				$(document).ready(function(){
+			    	$(".mostrar_puntuaciones").append("<h4 class=\"centrar-texto\">NO EXISTEN COMPETICIONES</h4>");
+	      		});
+	      	<?php echo "</script>";
+		}
+		else
+		{
+			# Recorremos array PHP para introducir datos en puntuaciones.html con JS.
+			echo "<script type=\"text/JavaScript\">"; ?>
+				$(document).ready(function(){
+					<!-- json_encode(): funcion para convertir array PHP en array JS -->
+					var DatosCompeticion = <?php echo json_encode($_SESSION['DatosCompeticion']); ?>;
+
+					$(".mostrar_puntuaciones").append("<div class=\"row\">");
+					for (i = 0; i < <?php echo $_SESSION['NumCompeticiones']; ?>; i++) { 			    		
+						if (DatosCompeticion[i][1] != 0)
+						{
+							$(".mostrar_puntuaciones").append(
+							"<div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-6\">" +
+								"<table id=\"Puntuaciones" + DatosCompeticion[i][0] + "\" class=\"table\">" +
+								"<caption><h4>" + DatosCompeticion[i][0] + "</h4></caption>" +
+		  							"<tr id=\"filacabecera\">" +
+		    							"<th>#</th>" +
+		    							"<th>Usuario</th>" +
+		    							"<th>Puntuación</th>" +
+		  							"</tr>");
+							for (j = 0; j < DatosCompeticion[i][1]; j++)
+							{
+								if (DatosCompeticion[i][2][j] == "<?php echo $_SESSION['NombreUsuario']; ?>")
+								{
+									$("#Puntuaciones" + DatosCompeticion[i][0] + "").append(
+					 					"<tr id=\"puntuacionusuario\">" +
+											"<td>" + (j + 1) + "</td>" +
+		    								"<td>" + DatosCompeticion[i][2][j] + "</td>" +
+		    								"<td>" + DatosCompeticion[i][3][j] + "</td>" +
+		  								"</tr>");
+		  						}
+		  						else
+		  						{
+		  							$("#Puntuaciones" + DatosCompeticion[i][0] + "").append(
+					 					"<tr>" +
+											"<td>" + (j + 1) + "</td>" +
+		    								"<td>" + DatosCompeticion[i][2][j] + "</td>" +
+		    								"<td>" + DatosCompeticion[i][3][j] + "</td>" +
+		  								"</tr>");
+		  						}
+							}
+			 				$("#" + DatosCompeticion[i][0] + "").append("</table>");
+						}
+			    	}
+			    	$(".mostrar_puntuaciones").append("</div>");
+	      		});
+	      	<?php echo "</script>";
+		}
+	}
+
+	# Muestra las puntuaciones obtenidas en cada una de las pruebas en las que ha participado el usuario.
+	function mostrar_mispuntuaciones()
+	{
+		if ($_SESSION['NumCompeticionesUsuario'] == 0) {
+			# Codigo JS para mostrar competiciones.
+			echo "<script type=\"text/JavaScript\">"; ?>
+				$(document).ready(function(){
+			    	$(".mostrar_mispuntuaciones").append("<h4 class=\"centrar-texto\">NO EXISTEN PUNTUACIONES</h4>");
+	      		});
+	      	<?php echo "</script>";
+		}
+		else
+		{
+			# Recorremos array PHP para introducir datos en puntuaciones.html con JS.
+			echo "<script type=\"text/JavaScript\">"; ?>
+				$(document).ready(function(){
+					<!-- json_encode(): funcion para convertir array PHP en array JS -->
+					var DatosCompeticion = <?php echo json_encode($_SESSION['DatosCompeticion']); ?>;
+
+					$(".mostrar_mispuntuaciones").append("<div class=\"row\">");
+					for (i = 0; i < <?php echo $_SESSION['NumCompeticiones']; ?>; i++) { 			    		
+						if (DatosCompeticion[i][1] != 0)
+						{
+							$(".mostrar_mispuntuaciones").append(
+							"<div class=\"col-xs-12 col-sm-12 col-md-12 col-lg-6\">" +
+								"<table id=\"MisPuntuaciones" + DatosCompeticion[i][0] + "\" class=\"table\">" +
+								"<caption><h4>" + DatosCompeticion[i][0] + "</h4></caption>" +
+		  							"<tr id=\"filacabecera\">" +
+		    							"<th>Prueba</th>" +
+		    							"<th>Fichero</th>" +
+		    							"<th>Puntuación</th>" +
+		  							"</tr>");
+							for (j = 0; j < DatosCompeticion[i][1]; j++)
+							{
+								$("#MisPuntuaciones" + DatosCompeticion[i][0] + "").append(
+					 				"<tr>" +
+										"<td>" + DatosCompeticion[i][2][j] + "</td>" +
+		    							"<td>" + DatosCompeticion[i][3][j] + "</td>" +
+		    							"<td>" + DatosCompeticion[i][4][j] + "</td>" +
+		  							"</tr>");
+							}
+			 				$("#" + DatosCompeticion[i][0] + "").append("</table>");
+						}
+			    	}
+			    	$(".mostrar_mispuntuaciones").append("</div>");
+	      		});
+	      	<?php echo "</script>";
 		}
 	}
 ?>

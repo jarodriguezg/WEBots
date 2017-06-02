@@ -7,18 +7,18 @@
 }
 
 .form-group {
-	padding-bottom: 150px;
+	padding-bottom: 50px;
 }
 
 .subidafichero	{
 	position: relative;
-	margin-bottom: 50px;
+	margin-bottom: 10px;
 }
 
 .btn-file	{
 	max-width: none;
 	width: 102px;
-	position: absolute;
+	position: relative;
 	top: 0px;
 	left: 0px;
 	z-index: 1;
@@ -30,10 +30,4 @@
 	left: 0px;
 	text-align: left;
 	z-index: 0;
-}
-
-.nombrefichero	{
-	position: relative;
-	left: 105px;
-	top: 7px;
 }

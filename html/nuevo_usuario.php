@@ -12,9 +12,26 @@
 		die();
 	}
 
+	$nombresusuario = $c->query("SELECT nom_usuario FROM ".$_SESSION['usuarios']."");
+
+	# Comprobamos si nom_usuario existe en la BBDD.
+	if ($nombresusuario->num_rows > 0)
+	{	
+		while($fila = $nombresusuario->fetch_array())
+		{	
+			if ($_POST['nombreusuario'] == $fila["nom_usuario"])
+			{	
+				$_SESSION['ExisteNomUsuario'] = 1;
+				$_SESSION['NombreUsuario'] = $fila["nom_usuario"];	
+				header('Location: registro.html');
+				exit();
+			}
+		}
+	}
+
 	# Insertar datos en tabla usuarios
-	if ($c->query("INSERT INTO ".$_SESSION['usuarios']." (email, nombre, apellido, clave) 
-		VALUES ('".$_SESSION['correo']."', '".$_POST['nombre']."', '".$_POST['apellido']."', '".$_POST['clave']."')"))
+	if ($c->query("INSERT INTO ".$_SESSION['usuarios']." (email, nom_usuario, nombre, apellido, clave) 
+		VALUES ('".$_SESSION['correo']."', '".$_POST['nombreusuario']."','".$_POST['nombre']."', '".$_POST['apellido']."', '".$_POST['clave']."')"))
 	{	
 		# Variable para comprobar que el registro del usuario ha sido un éxito.
 		# Se usa para mostrar mensaje éxito en página ppal.

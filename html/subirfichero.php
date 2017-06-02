@@ -4,29 +4,37 @@ include_once ("../include/inicia_ses.inc.php"); 	# Usamos sesion activa para obt
 include_once ("../include/datos.inc.php");  		# Incluimos datos básicos de la BBDD.
 
 # Validación y comprobaciones de fichero/s elegidos por el usuario.
+# Usamos la variable de sesión para visualizar mensajes de error por pruebas.
+$_SESSION['PruebasCompeticion'] = $_POST['numpruebas'];
 for ($prueba = 0; $prueba < $_POST['numpruebas']; $prueba++){
 	# $_FILES['fichero_usuario']['error'][$prueba]) == 0 (Archivo subido OK), == 1-8 (Diversos errores al subir fichero).
 	if($_FILES['fichero_usuario']['error'][$prueba] > 0)
-	{	$_SESSION['ErrorFichero'] = "Error al subir fichero/s seleccionado/s";	}
+	{	$_SESSION['ErrorFichero'][$prueba] = "Error al subir fichero seleccionado";	}
 	else{
 		# El tipo de fichero insertado NO es nom_fichero.h (x-chdr)
 		if($_FILES['fichero_usuario']['type'][$prueba] != "text/x-chdr")
-		{	$_SESSION['ErrorFichero'] = "El tipo de fichero/s introducido no es correcto";	}
+		{	$_SESSION['ErrorFichero'][$prueba] = "El tipo de fichero introducido no es correcto";	}
 		# Fichero vacio.
 		if($_FILES['fichero_usuario']['size'][$prueba] == 0)
-		{	$_SESSION['ErrorFichero'] = "Fichero Vacío";	}
+		{	$_SESSION['ErrorFichero'][$prueba] = "Fichero Vacío";	}
 	}
 }
+
+# Si existen errores terminamos la ejecución del código. (Evitar creación de carpetas y ficheros)
+if (isset($_SESSION['ErrorFichero'])) {	header('Location: ../html/competicion.html');	exit();	}
+
 	# Comprobamos que cada fichero tiene un nombre distinto.
 	for ($a = 0; $a < ($_POST['numpruebas'] - 1); $a++){	
 		for ($b = ($a + 1); $b < $_POST['numpruebas']; $b++){		
 			if ($_FILES['fichero_usuario']['name'][$a] == $_FILES['fichero_usuario']['name'][$b])
-			{	$_SESSION['ErrorFichero'] = "Existen ficheros con el mismo nombre en pruebas distintas";	}
+			{	
+				$_SESSION['ErrorFichero'][$a] = "Existen ficheros con el mismo nombre";
+				$_SESSION['ErrorFichero'][$b] = "Existen ficheros con el mismo nombre";	
+				header('Location: ../html/competicion.html');	
+				exit();
+			}
 		}
 	}
-
-# Si existen errores terminamos la ejecución del código. (Evitar creación de carpetas y ficheros)
-if (isset($_SESSION['ErrorFichero'])) {	header('Location: ../html/competicion.html');	exit();	}
 
 # Crear carpeta nueva si NO existe.
 $serv = $_SERVER['DOCUMENT_ROOT'] . "/WEBots/competiciones/"; 
@@ -146,7 +154,7 @@ clean-all: clean
 
 		# Insertar datos en tabla pruebas.$_FILES['fichero_usuario']['name'][$prueba]
 		if (!$c->query("INSERT INTO ".$_SESSION['pruebas']." (num_prueba, nom_competicion, nom_usuario, puntuacion_prueba, nom_fichero) 
-			VALUES ('".($prueba + 1)."', '".$_POST['competicion']."', '".$_SESSION['correo']."', '".$puntuacion."','".$_FILES['fichero_usuario']['name'][$prueba]."')"))
+			VALUES ('".($prueba + 1)."', '".$_POST['competicion']."', '".$_SESSION['NombreUsuario']."', '".$puntuacion."','".$_FILES['fichero_usuario']['name'][$prueba]."')"))
 		{	$_SESSION['BBDDError'] = "Error al insertar prueba: (" . $c->errno . ") " . $c->error;	}
 
 		# Cerrar conexión
@@ -170,13 +178,15 @@ clean-all: clean
 
 	# Insertar datos en tabla puntuaciones.
 	if (!$c->query("INSERT INTO ".$_SESSION['puntuaciones']." (nom_usuario, nom_competicion, puntuacion_total) 
-		VALUES ('".$_SESSION['correo']."', '".$_POST['competicion']."', '".$puntuaciontotal."')"))
+		VALUES ('".$_SESSION['NombreUsuario']."', '".$_POST['competicion']."', '".$puntuaciontotal."')"))
 	{	$_SESSION['BBDDError'] = "Error al insertar puntuacion: (" . $c->errno . ") " . $c->error;	}
 
 	# Cerrar conexión
 	$c->close(); 
 
 	echo '</pre>';
+
+	header('Location: ../html/mostrarmiscompeticiones.php');
 } # Fin de if(!file_exists($ruta . "/" . $_POST['competicion']))
 # Si EXISTE la carpeta competición significa que el usuario ya ha participado.
 # Deshabilitar botón Participar de las competiciones en las que el usuario haya participado.

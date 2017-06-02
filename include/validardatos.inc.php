@@ -38,7 +38,9 @@
 			# Prohibir acceso al registro del usuario: header('Location: ../html/registro.html');
 			$_SESSION['OKdatos'] = 1; 
 		}
-		else {	$_SESSION['reginicial'] = 1; header('Location: ../html/registro.html');	}
+		else {	
+			$_SESSION['reginicial'] = 1; 
+			header('Location: ../html/registro.html');	}
 	}
 	# Si existe usuario válido (usuario-clave).
 	else if (isset($existeusuario))

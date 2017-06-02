@@ -1,8 +1,9 @@
 <?php
 	# Propagación de sesiones
 	include_once ("../include/inicia_ses.inc.php");
+	include_once ("../include/acceso.inc.php");
 
-	if (!isset($_SESSION['reginicial']))
+	if (!isset($_SESSION['reginicial']) && !isset($_SESSION['ExisteNomUsuario']))
 	{	
 		# Prohibición acceso a registro.html sin correo-e.
 		header('Location: ../index.html');
@@ -32,7 +33,7 @@
 	<script type="text/JavaScript" src="../scripts/registro.js"></script>
 </head>
 <body>
-
+	<?php validar_nombreusuario(); ?>
 	<div class="container">
 		<form id="regfinal" action="nuevo_usuario.php" method="post">
 			<div class="col-xs-offset-3 col-xs-6 col-sm-offset-4 col-sm-4 col-md-offset-4 col-md-4">
@@ -43,6 +44,10 @@
 				<div class="alert alert-danger"><strong>Aviso Contraseña: </strong>
 					Debe contener al menos una mayúscula, una minúscula y un número. <br>
 					Longitud mínima: 8 caracteres.
+				</div>
+				<div class="form-group">
+			    	<label>Nombre Usuario:</label>
+			    	<input type="text" name="nombreusuario" id="nombreusuario" class="form-control">
 				</div>
 				<div class="form-group">
 			    	<label>Nombre:</label>
