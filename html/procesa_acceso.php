@@ -26,6 +26,7 @@
     		# Información usuario encontrado.
     		$fila = $usuario->fetch_assoc();
     	 	$_SESSION['DatosUsuario'] = $fila["nombre"]." " .$fila["apellido"];	
+    	 	$_SESSION['NombreUsuario'] = $fila["nom_usuario"];
 			# Variable para comprobar que el registro del usuario ha sido un éxito.
 			# Se usa para mostrar mensaje éxito en página ppal.
 			$_SESSION['OKingreso'] = 1;
