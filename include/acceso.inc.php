@@ -63,7 +63,11 @@
 				$("#nombrecompeticion").after(	"<div class=\"alert alert-warning\">" +
 					"<strong>Nombre Competicion: <?php echo $_SESSION['NombreCompeticion'] ?> -</strong> YA se encuentra registrado en el sistema. Pruebe otro nombre distinto." +
 					"</div>");
+				$("#competiciones").val("<?php echo $_SESSION['NombreCompeticion'] ?>");
 				$("#modificarCompeticion").collapse('show');
+				$("#modificarCompeticion").on('hidden.bs.collapse', function(){
+					$(".alert-warning").remove();
+				});
 			});
 			<?php echo "</script>";
 		}
@@ -358,7 +362,7 @@
 					$(".mostrar_competiciones").append("<div class=\"row\">");
 					for (i = 0; i < <?php echo $_SESSION['NumCompeticiones']; ?>; i++) { 
 			    		$(".mostrar_competiciones").append(
-			    		"<div class=\"col-sm-12 col-md-6 col-lg-6\">" +
+			    		"<div id=\"Bloque" + nom_competicion[i] + "\" class=\"col-sm-12 col-md-6 col-lg-6\">" +
 							"<div class=\"thumbnail\">" +
 								"<div class=\"caption\">" +
 									"<h4 class=\"centrar-texto\">" + nom_competicion[i] + "  Pruebas: " + num_pruebas[i] + "</h4>" +
@@ -391,8 +395,40 @@
 						);
 			    	}
 			    	$(".mostrar_competiciones").append("</div>");
+
+					// Obtenemos fecha para comprobar competiciones disponibles.
+
+					var fechaactual = new Date();
+					if (fechaactual.getDate() < 10){ dia = "0" + fechaactual.getDate();	}
+					if ((fechaactual.getMonth()+1) < 10){ mes = "0" + (fechaactual.getMonth()+1); }
+					anio = fechaactual.getFullYear();
+
+					for (i = 0; i < <?php echo $_SESSION['NumCompeticiones']; ?>; i++) { 
+			    		// Obtenemos datos de cada fecha introducida para realizar comprobaciones.
+						var diafechainicio = fecha_inicio[i].substring(0,2);
+						var diafechafin = fecha_fin[i].substring(0,2);
+						var mesfechainicio = fecha_inicio[i].substring(3,5);
+						var mesfechafin = fecha_fin[i].substring(3,5);
+						var aniofechainicio = fecha_inicio[i].substring(6);
+						var aniofechafin = fecha_fin[i].substring(6);
+						
+						// Competición no ha comenzado todavía.
+						if ((aniofechainicio > anio) || (aniofechainicio == anio && mesfechainicio > mes) || (aniofechainicio == anio && mesfechainicio == mes && diafechainicio > dia))
+						{							
+							$("#" + nom_competicion[i] + "btn-participar").attr("disabled", "true");
+							$("." + nom_competicion[i] + "").before("<h3 class=\"centrar-texto\">COMPETICIÓN NO DISPONIBLE</h3>");
+							$("." + nom_competicion[i] + "").remove();
+						}
+						// Competición FINALIZADA.
+						if ((aniofechafin < anio) || (aniofechafin == anio && mesfechafin < mes) || (aniofechafin == anio && mesfechafin == mes && diafechafin < dia))
+						{
+							$("#Bloque" + nom_competicion[i] + "").remove();
+						}
+			    	}
 	      		});
 	      	<?php echo "</script>";
+
+
 
 	      	# Deshabilitar botón participar de las competiciones en las que el usuario ya ha participado.
 	      	for($i = 0; $i < count($_SESSION['competicionrealizada']); $i++) 
@@ -406,6 +442,7 @@
 	      		<?php echo "</script>";
 			}
 
+			# Visualizamos errores si existen.
 			if (isset($_SESSION['ErrorFichero'])) {
 				echo 	"<div class=\"mensajes alert alert-danger alert-dismissible\" role=\"alert\">
  				 			<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">
@@ -419,6 +456,64 @@
 				unset($_SESSION['ErrorFichero']);
 				unset($_SESSION['PruebasCompeticion']);
 			}
+
+			# Detectamos la versión del navegador usado por el usuario para adaptar el botón "Examinar...".
+			# Ancho asignado por defecto para navegador Mozilla Firefox.
+			$user_agent = $_SERVER['HTTP_USER_AGENT'];
+			if(strpos($user_agent, 'Chromium') !== FALSE)
+			{	
+				# Codigo JS para cambiar el btn-file.
+				echo "<script type=\"text/JavaScript\">"; ?>
+					$(document).ready(function(){
+			    		$(".btn-file").css("width","138px");
+	      			});
+	      		<?php echo "</script>";
+	      	}
+			elseif(strpos($user_agent, 'Edge') !== FALSE) //IE Edge
+			{	
+				# Codigo JS para cambiar el btn-file.
+				echo "<script type=\"text/JavaScript\">"; ?>
+					$(document).ready(function(){
+			    		$(".btn-file").css("width","138px");
+	      			});
+	      		<?php echo "</script>";
+	      	}
+			elseif(strpos($user_agent, 'Trident') !== FALSE) //IE 11
+			{	
+				# Codigo JS para cambiar el btn-file.
+				echo "<script type=\"text/JavaScript\">"; ?>
+					$(document).ready(function(){
+			    		$(".btn-file").css("width","138px");
+	      			});
+	      		<?php echo "</script>";
+	      	}
+			elseif(strpos($user_agent, 'MSIE') !== FALSE)
+			{	
+				# Codigo JS para cambiar el btn-file.
+				echo "<script type=\"text/JavaScript\">"; ?>
+					$(document).ready(function(){
+			    		$(".btn-file").css("width","138px");
+	      			});
+	      		<?php echo "</script>";
+	      	}
+			elseif(strpos($user_agent, 'Chrome') !== FALSE)
+			{	
+				# Codigo JS para cambiar el btn-file.
+				echo "<script type=\"text/JavaScript\">"; ?>
+					$(document).ready(function(){
+			    		$(".btn-file").css("width","138px");
+	      			});
+	      		<?php echo "</script>";
+	      	}
+			elseif(strpos($user_agent, 'Safari') !== FALSE)
+			{	
+				# Codigo JS para cambiar el btn-file.
+				echo "<script type=\"text/JavaScript\">"; ?>
+					$(document).ready(function(){
+			    		$(".btn-file").css("width","138px");
+	      			});
+	      		<?php echo "</script>";
+	      	}
 		}
 	}
 
@@ -631,6 +726,15 @@
 			   		$("#modificarCompeticion").on('show.bs.collapse', function(){
 						var pos = nom_competicion.indexOf($("#competiciones").val());
 						var descripcion = descripcion_competicion[pos].replace(/<\/br>/g, "\r\n");
+
+						// Obtenemos datos de cada fecha introducida para realizar comprobaciones.
+						var diafechainicio = fecha_inicio[pos].substring(0,2);
+						var diafechafin = fecha_fin[pos].substring(0,2);
+						var mesfechainicio = fecha_inicio[pos].substring(3,5);
+						var mesfechafin = fecha_fin[pos].substring(3,5);
+						var aniofechainicio = fecha_inicio[pos].substring(6);
+						var aniofechafin = fecha_fin[pos].substring(6);
+
 						$("#nombrecompeticion").val(nom_competicion[pos]);
 						$("#numpruebas").val(num_pruebas[pos]);
 						$("#fechainicio").val(fecha_inicio[pos]);
@@ -638,9 +742,39 @@
 						$("#descripcion").val(descripcion);
 						$("#competiciones").attr("disabled", "true");
 						$("#regfinal").prepend("<input type=\"hidden\" name=\"nombrecompeticioninicial\" value=\""+ nom_competicion[pos] + "\" />");
+
+						// Competición EMPEZADA.
+						if ((aniofechainicio < anio) || (aniofechainicio == anio && mesfechainicio < mes) || (aniofechainicio == anio && mesfechainicio == mes && diafechainicio <= dia))
+						{							
+							$(".alert-info").after(
+							"<div class=\"alert alert-warning\">" +
+								"<p><strong>" + nom_competicion[pos] + " -</strong> Competición COMENZADA, sólo se permite modificar Fecha Fin y Descripción.</p>" +
+							"</div>");
+							$("#nombrecompeticion").attr("disabled", "true");
+							$("#numpruebas").attr("disabled", "true");
+							$("#fechainicio").attr("disabled", "true");
+							$(":reset").remove();
+						}
+						// Competición FINALIZADA.
+						if ((aniofechafin < anio) || (aniofechafin == anio && mesfechafin < mes) || (aniofechafin == anio && mesfechafin == mes && diafechafin < dia))
+						{
+							$(".alert-warning").remove();
+							$(".alert-info").after(
+							"<div class=\"alert alert-warning\">" +
+								"<p><strong>" + nom_competicion[pos] + " -</strong> Competición FINALIZADA, NO MODIFICABLE.</p>" +
+							"</div>");
+							$("#nombrecompeticion").attr("disabled", "true");
+							$("#numpruebas").attr("disabled", "true");
+							$("#fechainicio").attr("disabled", "true");
+							$("#fechafin").attr("disabled", "true");
+							$("#descripcion").attr("disabled", "true");
+							$(".btn-guardar").attr("disabled", "true");
+							$(":reset").remove();
+						}
 					});
 					$("#modificarCompeticion").on('hidden.bs.collapse', function(){
 						$("#competiciones").removeAttr("disabled");
+						$(".alert-warning").remove();
 					});
 	      		});
 	      	<?php echo "</script>";

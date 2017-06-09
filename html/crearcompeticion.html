@@ -9,8 +9,6 @@
 		# Prohibición acceso a perfil.html sin estar logueado en el sistema.
 		header('Location: ../index.html');
 	}
-
-	estado_nuevacompeticion();
 ?>
 
 <!DOCTYPE html>
@@ -39,7 +37,8 @@
 </head>
 <body>		
 	<?php 	acceso_usuario(); 
-			validar_nombrecompeticion();	?>		
+			validar_nombrecompeticion();	
+			estado_nuevacompeticion();		?>		
 	<div id="header">
 		<div class="container-fluid">
 		<div class="row">

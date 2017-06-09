@@ -9,9 +9,6 @@
 		# Prohibición acceso a perfil.html sin estar logueado en el sistema.
 		header('Location: ../index.html');
 	}
-
-	estado_eliminarcompeticion();
-	estado_editarcompeticion();
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +38,9 @@
 <body>		
 	<?php 	acceso_usuario(); 
 			datos_competiciones();	
-			validar_nombrecompeticion();	?>		
+			validar_nombrecompeticion();	
+			estado_eliminarcompeticion();
+			estado_editarcompeticion();		?>		
 	<div id="header">
 		<div class="container-fluid">
 		<div class="row">
@@ -104,7 +103,7 @@
 							</p>
 							<p><strong>Descripción: </strong> Longitud máxima: 200 caracteres.</p>
 						</div>
-						<div class="alert alert-info col-md-12">
+						<div class="alert alert-info">
 							<p><strong>Fecha: </strong> Formato (dd/mm/aaaa). <em>Ejemplo: 19/07/2017</em></p>
 							<p><strong>Aviso: </strong> Dejar vacíos los campos que no se quieran modificar.</p>
 						</div>
@@ -134,7 +133,8 @@
 							<label>Descripción:</label>
 							<textarea name="descripcion" id="descripcion" class="form-control" rows="3"></textarea>
 						</div>
-						<button type="submit" class="btn btn-success btn-block">Guardar Cambios</button>
+						<button type="submit" class="btn btn-success btn-block btn-guardar">Guardar Cambios</button>
+						<button type="reset" class="btn btn-warning btn-block">Resetear</button>
 						<button id="eliminarcompeticion" type="submit" class="btn btn-danger btn-block" formaction="eliminar_competicion.php">Eliminar</button>
 					</form>
 					

@@ -9,8 +9,6 @@
 		# Prohibición acceso a perfil.html sin estar logueado en el sistema.
 		header('Location: ../index.html');
 	}
-
-	estado_editar();
 ?>
 
 <!DOCTYPE html>
@@ -38,7 +36,8 @@
 	<script type="text/JavaScript" src="../scripts/alertas.js"></script>
 </head>
 <body>		
-	<?php 	acceso_usuario(); ?>		
+	<?php 	acceso_usuario(); 
+			estado_editar();	?>		
 	<div id="header">
 		<div class="container-fluid">
 		<div class="row">

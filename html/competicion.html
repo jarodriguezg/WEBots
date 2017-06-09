@@ -9,8 +9,6 @@
 		# Prohibición acceso a competicion.html sin estar logueado en el sistema.
 		header('Location: ../index.html');
 	}
-
-	estado_registro();
 ?>
 
 <!DOCTYPE html>
@@ -39,7 +37,7 @@
 <body>
 	<?php 	validar_datosacceso();
 			acceso_usuario(); 
-			mostrar_competiciones();?>
+			mostrar_competiciones();	?>
 	<div id="header">
 		<div class="container-fluid">
 		<div class="row">

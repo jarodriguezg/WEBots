@@ -45,29 +45,24 @@ if(!file_exists($ruta)){	mkdir($ruta);	echo "Se ha creado el directorio: " . $ru
 $ruta = $ruta . "/" . $_POST['competicion'];
 if(!file_exists($ruta)){	
 	mkdir($ruta);	
-	echo "Se ha creado el directorio: " . $ruta;	
-
-	echo '<pre>';
-	echo 'Más información de depuración:';
-	print_r($_FILES);
 
 	# Variable que almacena el resultado de la competicion.
 	$puntuacioncompeticion = 0;
 
-# Subida de fichero para cada prueba, almacenamiento de ficheros necesarios, compilación y ejecución.
+	# Subida de fichero para cada prueba, almacenamiento de ficheros necesarios, compilación y ejecución.
 	for ($prueba = 0; $prueba < $_POST['numpruebas']; $prueba++)
 	{
 		$rutaprueba = $ruta . "/Prueba" . ($prueba + 1) . "/";
 		mkdir($rutaprueba);		
-		echo "Se ha creado el directorio: " . $rutaprueba;
 
 		$dir_subida = '/var/www/WEBots/competiciones/'.$_SESSION['NombreUsuario'].'/'.$_POST['competicion'].'/Prueba' . ($prueba + 1) . '/';
 		$fichero_subido = $dir_subida . basename($_FILES['fichero_usuario']['name'][$prueba]);
 
-		if (move_uploaded_file($_FILES['fichero_usuario']['tmp_name'][$prueba], $fichero_subido)) {
-		    echo "El fichero es válido y se subió con éxito.\n";
-		} else {
-		    echo "¡Posible ataque de subida de ficheros!\n";
+		# Comprobación de que el fichero se sube correctamente
+		if (!move_uploaded_file($_FILES['fichero_usuario']['tmp_name'][$prueba], $fichero_subido)) {
+		    $_SESSION['ErrorFichero'][$prueba] = "Error en la subida del fichero";
+		    header('Location: ../html/competicion.html');	
+			exit();
 		}
 
 		$eficiencia = "/var/www/WEBots/uploads/EsqueletoEficiencia/eficiencia.cpp";
@@ -142,7 +137,6 @@ clean-all: clean
 		# Cuanto mayor sea $resultado menos eficiente es el algoritmo (menor $puntuación).
 		$puntuacion = 10 - $resultado;
 		$puntuacioncompeticion = $puntuacioncompeticion + $puntuacion;
-		echo "<h1> Puntuación Prueba".($prueba+1).": ".$puntuacion."</h1>";
 
 		# Insertar la puntuación obtenida en cada prueba.
 		// Crear conexión
@@ -154,40 +148,38 @@ clean-all: clean
 			die();
 		}
 
-		# Insertar datos en tabla pruebas.$_FILES['fichero_usuario']['name'][$prueba]
+		# Si la puntuación es 10, quiere decir que el fichero no se ha ejecutado correctamente. ($resultado == 0)
+		if ($puntuacion == 10)
+		{
+			$c->query("DELETE FROM ".$_SESSION['pruebas']." WHERE ".$_SESSION['pruebas'].".nom_competicion='".$_POST['competicion']."'");
+			$c->query("DELETE FROM ".$_SESSION['puntuaciones']." WHERE ".$_SESSION['puntuaciones'].".nom_competicion='".$_POST['competicion']."'");
+			# Cerrar conexión
+			$c->close();
+			
+			$_SESSION['ErrorFichero'][$prueba] = "El fichero no cumple el esqueleto aportado";
+			passthru('cd /var/www/WEBots/competiciones/'.$_SESSION['NombreUsuario'].'/ && rm -r '.$_POST['competicion'].'');
+			header('Location: ../html/competicion.html');
+			exit();
+		} 
+
+		# Insertar datos en tabla pruebas. $_FILES['fichero_usuario']['name'][$prueba]
 		if (!$c->query("INSERT INTO ".$_SESSION['pruebas']." (num_prueba, nom_competicion, nom_usuario, puntuacion_prueba, nom_fichero) 
 			VALUES ('".($prueba + 1)."', '".$_POST['competicion']."', '".$_SESSION['NombreUsuario']."', '".$puntuacion."','".$_FILES['fichero_usuario']['name'][$prueba]."')"))
 		{	$_SESSION['BBDDError'] = "Error al insertar prueba: (" . $c->errno . ") " . $c->error;	}
-
-		# Cerrar conexión
-		$c->close();
 
 		passthru('cd '.$dir_subida.' && make clean');
 	} # Fin del FOR que recorre las pruebas.
 
 	# Calculamos la puntuación total de la competición haciendo una media aritmetica de los resultados de las pruebas.
 	$puntuaciontotal = ($puntuacioncompeticion / $_POST['numpruebas']);
-	echo "<h1> Puntuación Total: ".$puntuaciontotal."</h1>";
 
 	# Insertar la puntuación obtenida en la competición.
-	// Crear conexión
-	$c = new mysqli($_SESSION['servidor'], $_SESSION['login'], $_SESSION['pass'], $_SESSION['BBDD']);
-	$c->set_charset('utf8');
-	// Comprobar conexión
-	if ($c->connect_error){
-		$_SESSION['BBDDError'] = "Conexión fallida: " . $c->connect_error;
-		die();
-	}
-
-	# Insertar datos en tabla puntuaciones.
 	if (!$c->query("INSERT INTO ".$_SESSION['puntuaciones']." (nom_usuario, nom_competicion, puntuacion_total) 
 		VALUES ('".$_SESSION['NombreUsuario']."', '".$_POST['competicion']."', '".$puntuaciontotal."')"))
 	{	$_SESSION['BBDDError'] = "Error al insertar puntuacion: (" . $c->errno . ") " . $c->error;	}
 
 	# Cerrar conexión
 	$c->close(); 
-
-	echo '</pre>';
 
 	header('Location: ../html/mostrarmiscompeticiones.php');
 } # Fin de if(!file_exists($ruta . "/" . $_POST['competicion']))
