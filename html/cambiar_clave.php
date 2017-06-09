@@ -14,46 +14,14 @@
 		die();
 	}
 
-	$nombresusuario = $c->query("SELECT nom_usuario FROM ".$_SESSION['usuarios']."");
-
-	# Comprobamos si nom_usuario existe en la BBDD.
-	if ($nombresusuario->num_rows > 0)
-	{	
-		while ($fila = $nombresusuario->fetch_array())
-		{	
-			if ($_POST['nombreusuario'] == $fila["nom_usuario"])
-			{	
-				$_SESSION['ExisteNombreUsuario'] = $_POST['nombreusuario'];
-				$_SESSION['ExisteNomUsuario'] = 1;
-				header('Location: perfil.html');
-				exit();
-			}
-		}
-	}
-
 	# Condiciones para comprobar que datos ha introducido el usuario (datos a modificar).
-	if ($_POST['nombreusuario'] != ""){
-		$actualiza_nombreusuario = $c->query("UPDATE ".$_SESSION['usuarios']." 
-		SET nom_usuario='".$_POST['nombreusuario']."' WHERE (email='".$_SESSION['correo']."')");
-		$_SESSION['NombreUsuario'] = $_POST['nombreusuario'];
-	}
-	if ($_POST['nombre'] != ""){
-		$actualiza_nombre = $c->query("UPDATE ".$_SESSION['usuarios']." 
-		SET nombre='".$_POST['nombre']."' WHERE (email='".$_SESSION['correo']."')");
-	}
-
-	if ($_POST['apellido'] != ""){
-		$actualiza_apellido = $c->query("UPDATE ".$_SESSION['usuarios']." 
-		SET apellido='".$_POST['apellido']."' WHERE (email='".$_SESSION['correo']."')");
-	}
-
 	if ($_POST['clave'] != ""){
 		$actualiza_clave = $c->query("UPDATE ".$_SESSION['usuarios']." 
 		SET clave='".$_POST['clave']."' WHERE (email='".$_SESSION['correo']."')");
 	}
 
 	# Modificar datos de tabla Usuarios.
-	if (isset($actualiza_nombreusuario) || isset($actualiza_nombre) || isset($actualiza_apellido) || isset($actualiza_clave))
+	if (isset($actualiza_clave))
 	{	
 		# Variable para comprobar que la modificación del usuario ha sido un éxito.
 		# Se usa para mostrar mensaje éxito.
@@ -71,5 +39,5 @@
 	# ¿Forzar al cierre de sesión (Modificar datos implica cerrar sesión)?
 	# header('Location: procesa_cierre.php'); 
 
-	header('Location: perfil.html');
+	header('Location: cambiar_clave.html');
 ?>

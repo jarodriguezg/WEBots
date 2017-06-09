@@ -1,4 +1,6 @@
 <?php
+	header('Content-Type: text/html; charset=utf-8');
+	
 	include_once ("../include/inicia_ses.inc.php"); # Usamos sesion activa para obtener valor correo.
 	include_once ("../include/datos.inc.php"); 		# Incluimos datos básicos de la BBDD.
 
@@ -6,6 +8,7 @@
 
 		# Crear conexión
 		$c = new mysqli($_SESSION['servidor'], $_SESSION['login'], $_SESSION['pass'], $_SESSION['BBDD']);
+		$c->set_charset('utf8');
 		# Comprobar conexión
 		if ($c->connect_error){
 			$_SESSION['OKingreso'] = 0;

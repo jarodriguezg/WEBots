@@ -1,4 +1,5 @@
 <?php
+header('Content-Type: text/html; charset=utf-8');
 
 include_once ("../include/inicia_ses.inc.php"); 	# Usamos sesion activa para obtener datos.
 include_once ("../include/datos.inc.php");  		# Incluimos datos básicos de la BBDD.
@@ -38,7 +39,7 @@ if (isset($_SESSION['ErrorFichero'])) {	header('Location: ../html/competicion.ht
 
 # Crear carpeta nueva si NO existe.
 $serv = $_SERVER['DOCUMENT_ROOT'] . "/WEBots/competiciones/"; 
-$ruta = $serv . $_SESSION['correo'];
+$ruta = $serv . $_SESSION['NombreUsuario'];
 
 if(!file_exists($ruta)){	mkdir($ruta);	echo "Se ha creado el directorio: " . $ruta;	} 
 $ruta = $ruta . "/" . $_POST['competicion'];
@@ -60,7 +61,7 @@ if(!file_exists($ruta)){
 		mkdir($rutaprueba);		
 		echo "Se ha creado el directorio: " . $rutaprueba;
 
-		$dir_subida = '/var/www/WEBots/competiciones/'.$_SESSION['correo'].'/'.$_POST['competicion'].'/Prueba' . ($prueba + 1) . '/';
+		$dir_subida = '/var/www/WEBots/competiciones/'.$_SESSION['NombreUsuario'].'/'.$_POST['competicion'].'/Prueba' . ($prueba + 1) . '/';
 		$fichero_subido = $dir_subida . basename($_FILES['fichero_usuario']['name'][$prueba]);
 
 		if (move_uploaded_file($_FILES['fichero_usuario']['tmp_name'][$prueba], $fichero_subido)) {
@@ -146,6 +147,7 @@ clean-all: clean
 		# Insertar la puntuación obtenida en cada prueba.
 		// Crear conexión
 		$c = new mysqli($_SESSION['servidor'], $_SESSION['login'], $_SESSION['pass'], $_SESSION['BBDD']);
+		$c->set_charset('utf8');
 		// Comprobar conexión
 		if ($c->connect_error){
 			$_SESSION['BBDDError'] = "Conexión fallida: " . $c->connect_error;
@@ -170,6 +172,7 @@ clean-all: clean
 	# Insertar la puntuación obtenida en la competición.
 	// Crear conexión
 	$c = new mysqli($_SESSION['servidor'], $_SESSION['login'], $_SESSION['pass'], $_SESSION['BBDD']);
+	$c->set_charset('utf8');
 	// Comprobar conexión
 	if ($c->connect_error){
 		$_SESSION['BBDDError'] = "Conexión fallida: " . $c->connect_error;

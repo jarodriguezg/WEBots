@@ -8,8 +8,18 @@
 	color: #003300;
 }
 
-.btn-success { margin-bottom: 10px !important; }
+#footer	{
+	margin-top: 20px;
+}
 
 .centrar-texto{
 	text-align: center;
+}
+
+.btn-block	{
+	margin-bottom: 10px !important;
+}
+
+#modificarcompeticion	{
+	padding-top: 20px;
 }

@@ -1,11 +1,5 @@
 $(document).ready(function(){
-	$("#nombreusuario").select();
-
-	$("#eliminarusuario").click(function(){
-		var res = confirm("¿Seguro que quieres eliminar el usuario?");
-		if (res == true)
-		{	location.href = "../html/eliminar_usuario.php";		}
-	});
+	$("#clave").select();
 
 	$("#regfinal").submit(function(){
 		// Eliminamos mensajes de alerta (Evitar adicción de más de uno).
@@ -15,27 +9,15 @@ $(document).ready(function(){
 
 		var formulario = this;
 
-		var nombreusuario = formulario.nombreusuario.value;
-		var nombre = formulario.nombre.value;
-		var apellido = formulario.ap.value;
 		var clave = formulario.clave.value;
 		var clave2 = formulario.clave2.value;
 
-		if (nombreusuario == "" && nombre == "" && apellido == "" && clave == "" && clave2 == "")
+		if (clave == "" && clave2 == "")
 		{
-			formulario.nombreusuario.select();
-			$("#nombreusuario").after("<div class=\"alert alert-warning\">" +
+			formulario.clave.select();
+			$(".alert-danger").after("<div class=\"alert alert-warning\">" +
 						   	   "<strong>Editar Perfil -</strong> Introduzca algún dato a modificar" +
 						   	   "</div>");
-			return false;
-		}
-
-		if(nombreusuario.length >= 15)
-		{
-			formulario.nombreusuario.select();
-			$("#nombreusuario").after("<div class=\"alert alert-warning\">" +
-							  "<strong>Nombre Usuario -</strong> Contiene mas de 15 caracteres" +
-						   	  "</div>");
 			return false;
 		}
 

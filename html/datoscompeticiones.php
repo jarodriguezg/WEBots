@@ -13,8 +13,7 @@
 		die();
 	}
 
-	$existecompeticion 		= $c->query("SELECT * FROM ".$_SESSION['competiciones']."");
-	$competicionrealizada 	= $c->query("SELECT nom_competicion FROM ".$_SESSION['puntuaciones']." WHERE (nom_usuario='".$_SESSION['NombreUsuario']."')");
+	$existecompeticion 	= $c->query("SELECT * FROM ".$_SESSION['competiciones']."");
 
 	# Cerrar conexión
 	$c->close();
@@ -43,24 +42,7 @@
 		}
 	}
 
-	# Eliminamos la variable para generar una nueva con los datos actualizados.
-	unset($_SESSION['competicionrealizada']);
-	
-	# Obtenemos las competiciones en las que el usuario ha participado.
-	if ($competicionrealizada->num_rows > 0)
-	{	
-		$_SESSION['competicionrealizada'] = array();
-
-		while($fila = $competicionrealizada->fetch_array())
-		{	
-			array_push($_SESSION['competicionrealizada'], $fila["nom_competicion"]);
-		}
-	}
-
 	$existecompeticion->free();
-	$competicionrealizada->free();
 
-	# unset($_SESSION['competicionrealizada']);
-
-	header('Location: competicion.html');
+	header('Location: administrarcompeticion.html');
 ?>

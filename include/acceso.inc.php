@@ -1,6 +1,9 @@
 <?php
+	header('Content-Type: text/html; charset=utf-8');
+
 	include_once ("inicia_ses.inc.php");
 
+	# Comprobación de que los datos de acceso se encuentran en la BBDD.
 	function validar_datosacceso() {
 		if (isset($_SESSION['OKdatos']))
 		{
@@ -32,22 +35,42 @@
 		}
 	}
 
+	# Comprobación que el nombre de usuario sea único, si existe previamente -> Error.
 	function validar_nombreusuario() {
 		if (isset($_SESSION['ExisteNomUsuario']))
 		{
 			echo "<script type=\"text/JavaScript\">"; ?>
 				$(document).ready(function(){
-					$("#nombreusuario").val("<?php echo $_SESSION['NombreUsuario'] ?>");
+					$("#nombreusuario").val("<?php echo $_SESSION['ExisteNombreUsuario'] ?>");
 					$("#nombreusuario").select();
 					$("#nombreusuario").after(	"<div class=\"alert alert-warning\">" +
-						"<strong>Nombre Usuario: <?php echo $_SESSION['NombreUsuario'] ?> -</strong> YA se encuentra registrado en el sistema. Pruebe otro nombre distinto." +
+						"<strong>Nombre Usuario: <?php echo $_SESSION['ExisteNombreUsuario'] ?> -</strong> YA se encuentra registrado en el sistema. Pruebe otro nombre distinto." +
 						"</div>");
 				});
 			<?php echo "</script>";
+			unset($_SESSION['ExisteNombreUsuario']);
 			unset($_SESSION['ExisteNomUsuario']);
 		}
 	}
 
+	# Comprobación que el nombre de competición sea único, si existe previamente -> Error.
+	function validar_nombrecompeticion() {
+		if (isset($_SESSION['NombreCompeticion'])) {	
+			echo "<script type=\"text/JavaScript\">"; ?>
+			$(document).ready(function(){
+				$("#nombrecompeticion").val("<?php echo $_SESSION['NombreCompeticion'] ?>");
+				$("#nombrecompeticion").select();
+				$("#nombrecompeticion").after(	"<div class=\"alert alert-warning\">" +
+					"<strong>Nombre Competicion: <?php echo $_SESSION['NombreCompeticion'] ?> -</strong> YA se encuentra registrado en el sistema. Pruebe otro nombre distinto." +
+					"</div>");
+				$("#modificarCompeticion").collapse('show');
+			});
+			<?php echo "</script>";
+		}
+		unset($_SESSION['NombreCompeticion']);
+	}
+
+	# Estado del registro.
 	function estado_registro() {
 		if (isset($_SESSION['OKregistro']))
 		{
@@ -66,6 +89,86 @@
 						</div>";
 			}
 			unset($_SESSION['OKregistro']);
+		}
+	}
+
+	# Estado relativo al registro de una nueva competición.
+	function estado_nuevacompeticion() {
+		if (isset($_SESSION['OKcompeticion']))
+		{
+			if ($_SESSION['OKcompeticion'] == 0) {	
+				echo 	"<div class=\"mensajes alert alert-danger alert-dismissible\" role=\"alert\">
+ 					 		<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">
+ 					 		<span aria-hidden=\"true\">&times;</span></button>
+  								<strong>Crear Competición -</strong> ".$_SESSION['BBDDError']."
+						</div>";			
+			}
+			if ($_SESSION['OKcompeticion'] == 1) {	
+				echo 	"<div class=\"mensajes alert alert-success alert-dismissible\" role=\"alert\">
+ 				 			<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">
+ 				 			<span aria-hidden=\"true\">&times;</span></button>
+  								<strong>Crear Competición -</strong> Realizado con éxito.
+						</div>";
+			}
+			if ($_SESSION['OKcompeticion'] == 2) {	
+				echo 	"<div class=\"mensajes alert alert-danger alert-dismissible\" role=\"alert\">
+ 				 			<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">
+ 				 			<span aria-hidden=\"true\">&times;</span></button>
+  								<strong>Crear Competición -</strong> La Fecha introducida no es válida (NO existe).
+						</div>";
+			}
+			unset($_SESSION['OKcompeticion']);
+		}
+	}
+
+	# Eliminar competición
+	function estado_eliminarcompeticion() {
+		if (isset($_SESSION['OKeliminarcompeticion']))
+		{
+			if ($_SESSION['OKeliminarcompeticion'] == 0) {
+				echo 	"<div class=\"mensajes alert alert-danger alert-dismissible\" role=\"alert\">
+ 					 		<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">
+ 					 		<span aria-hidden=\"true\">&times;</span></button>
+  								<strong>Administrar Competición -</strong> ".$_SESSION['BBDDError']."
+						</div>";
+			}
+			if ($_SESSION['OKeliminarcompeticion'] == 1) {
+				echo 	"<div class=\"mensajes alert alert-success alert-dismissible\" role=\"alert\">
+ 					 		<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">
+ 					 		<span aria-hidden=\"true\">&times;</span></button>
+  								<strong>Administrar Competición -</strong> Competición eliminada con éxito.
+						</div>";
+			}
+			unset($_SESSION['OKeliminarcompeticion']);
+		}
+	}
+
+		# Editar usuario
+	function estado_editarcompeticion() {
+		if (isset($_SESSION['OKeditarcompeticion']))
+		{
+			if ($_SESSION['OKeditarcompeticion'] == 0) {
+				echo 	"<div class=\"mensajes alert alert-danger alert-dismissible\" role=\"alert\">
+ 					 		<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">
+ 					 		<span aria-hidden=\"true\">&times;</span></button>
+  								<strong>Administrar Competición -</strong> ".$_SESSION['BBDDError']."
+						</div>";
+			}
+			if ($_SESSION['OKeditarcompeticion'] == 1) {
+				echo 	"<div class=\"mensajes alert alert-success alert-dismissible\" role=\"alert\">
+ 					 		<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">
+ 					 		<span aria-hidden=\"true\">&times;</span></button>
+  								<strong>Administrar Competición -</strong> Campo/s modificados con éxito.
+						</div>";
+			}
+			if ($_SESSION['OKeditarcompeticion'] == 2) {	
+				echo 	"<div class=\"mensajes alert alert-danger alert-dismissible\" role=\"alert\">
+ 				 			<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">
+ 				 			<span aria-hidden=\"true\">&times;</span></button>
+  								<strong>Administrar Competición -</strong> La Fecha introducida no es válida (NO existe).
+						</div>";
+			}
+			unset($_SESSION['OKeditarcompeticion']);
 		}
 	}
 
@@ -141,13 +244,14 @@
 				unset($_SESSION['OKingreso']);
 			}
 			else if ($_SESSION['OKingreso'] == 1) {	
-				# Codigo JS para eliminar botón Ingresar y agregar información Usuario.
-				echo "<script type=\"text/JavaScript\">"; ?>
+				# Generamos la información para el administrador del sistema.
+				if ($_SESSION['NombreUsuario'] == "administrador")
+				{
+					echo "<script type=\"text/JavaScript\">"; ?>
 					$(document).ready(function(){
 				    	$(".navbar-text").before("<ul class=\"nav navbar-nav\">" +
-	        			"<li><a href=\"/WEBots/index.html\">Inicio<span class=\"sr-only\"></span></a></li>" +
- 						"<li><a href=\"/WEBots/html/mostrarcompeticiones.php\">Competiciones</a></li>" +
-  						"<li><a href=\"/WEBots/html/mostrarpuntuaciones.php\">Puntuaciones</a></li>" +
+ 						"<li><a href=\"/WEBots/html/crearcompeticion.html\">Crear Competición</a></li>" +
+  						"<li><a href=\"/WEBots/html/datoscompeticiones.php\">Administrar Competición</a></li>" +
 	      				"</ul>");
 	      				$(".navbar-text").remove();
 
@@ -159,16 +263,11 @@
   							" <?php echo $_SESSION['DatosUsuario']; ?>" +
   						"</button>" +
   						"<ul class=\"dropdown-menu\" aria-labelledby=\"btnMenuUsuario\">" +
-    						"<li><a id=\"editarusuario\" href=\"/WEBots/html/perfil.html\">" +
-    						"<span class=\"glyphicon glyphicon-pencil\" aria-hidden=\"true\"></span> Editar Usuario" +
+  							"<li><p id=\"usuario\"><em>Nombre Usuario: </em> <?php echo $_SESSION['NombreUsuario'] ?></p></li>" +
+  							"<li role=\"separator\" class=\"divider\"></li>" +
+    						"<li><a id=\"editarusuario\" href=\"/WEBots/html/cambiar_clave.html\">" +
+    						"<span class=\"glyphicon glyphicon-pencil\" aria-hidden=\"true\"></span> Cambiar Contraseña" +
     						"</a></li>" +
-    						"<li><a href=\"/WEBots/html/mostrarmiscompeticiones.php\">" +
-    						"<span class=\"glyphicon glyphicon-tower\" aria-hidden=\"true\"></span> Mis Competiciones" +
-    						"</a></li>" +
-    						"<li><a href=\"/WEBots/html/mostrarmispuntuaciones.php\">" +
-    						"<span class=\"glyphicon glyphicon-sort-by-order\" aria-hidden=\"true\"></span> Mis Puntuaciones" +
-    						"</a></li>" +
-    						"<li role=\"separator\" class=\"divider\"></li>" +
     						"<li><a href=\"/WEBots/html/procesa_cierre.php\">" +
     						"<span class=\"glyphicon glyphicon-off\" aria-hidden=\"true\"></span> Cerrar Sesión" +
     						"</a></li>" +
@@ -178,7 +277,50 @@
 
 						$("#MenuUsuario").css("width", $(".dropdown").css("width"));
 					});
-				<?php echo "</script>";
+					<?php echo "</script>";
+				}
+				else {
+				# Codigo JS para eliminar botón Ingresar y agregar información Usuario.
+					echo "<script type=\"text/JavaScript\">"; ?>
+						$(document).ready(function(){
+					    	$(".navbar-text").before("<ul class=\"nav navbar-nav\">" +
+		        			"<li><a href=\"/WEBots/index.html\">Inicio<span class=\"sr-only\"></span></a></li>" +
+	 						"<li><a href=\"/WEBots/html/mostrarcompeticiones.php\">Competiciones</a></li>" +
+	  						"<li><a href=\"/WEBots/html/mostrarpuntuaciones.php\">Puntuaciones</a></li>" +
+		      				"</ul>");
+		      				$(".navbar-text").remove();
+
+							$("#btnusuario").append("<div id=\"usuarioreg\" class=\"navbar-right\">" +
+					    	"<div class=\"dropdown\">" +
+	  						"<button class=\"btn dropdown-toggle\" type=\"button\" id=\"btnMenuUsuario\"" +
+	  						"data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"true\">" +
+	  							"<span class=\"glyphicon glyphicon-user\" aria-hidden=\"true\"></span>" +
+	  							" <?php echo $_SESSION['DatosUsuario']; ?>" +
+	  						"</button>" +
+	  						"<ul class=\"dropdown-menu\" aria-labelledby=\"btnMenuUsuario\">" +
+	  							"<li><p id=\"usuario\"><em>Nombre Usuario: </em> <?php echo $_SESSION['NombreUsuario'] ?></p></li>" +
+	  							"<li role=\"separator\" class=\"divider\"></li>" +
+	    						"<li><a id=\"editarusuario\" href=\"/WEBots/html/perfil.html\">" +
+	    						"<span class=\"glyphicon glyphicon-pencil\" aria-hidden=\"true\"></span> Editar Usuario" +
+	    						"</a></li>" +
+	    						"<li><a href=\"/WEBots/html/mostrarmiscompeticiones.php\">" +
+	    						"<span class=\"glyphicon glyphicon-tower\" aria-hidden=\"true\"></span> Mis Competiciones" +
+	    						"</a></li>" +
+	    						"<li><a href=\"/WEBots/html/mostrarmispuntuaciones.php\">" +
+	    						"<span class=\"glyphicon glyphicon-sort-by-order\" aria-hidden=\"true\"></span> Mis Puntuaciones" +
+	    						"</a></li>" +
+	    						"<li role=\"separator\" class=\"divider\"></li>" +
+	    						"<li><a href=\"/WEBots/html/procesa_cierre.php\">" +
+	    						"<span class=\"glyphicon glyphicon-off\" aria-hidden=\"true\"></span> Cerrar Sesión" +
+	    						"</a></li>" +
+	  						"</ul>" +
+							"</div>");
+							$("#btnregistro").remove();
+
+							$("#MenuUsuario").css("width", $(".dropdown").css("width"));
+						});
+					<?php echo "</script>";
+				}
 			}
 		}
 	}
@@ -202,6 +344,16 @@
 					<!-- json_encode(): funcion para convertir array PHP en array JS -->
 					var nom_competicion = <?php echo json_encode($_SESSION['nom_competicion']); ?>;
 					var num_pruebas = <?php echo json_encode($_SESSION['num_pruebas']); ?>;
+					var fecha_inicio = [];
+					var fecha_fin = [];
+					var descripcion_competicion = [];
+					<?php 	for ($i = 0; $i < $_SESSION['NumCompeticiones']; $i++)
+							{	
+								echo "fecha_inicio[".$i."] = \"".$_SESSION['fecha_inicio'][$i]."\";";
+								echo "fecha_fin[".$i."] = \"".$_SESSION['fecha_fin'][$i]."\";";
+								echo "descripcion_competicion[".$i."] = \"".$_SESSION['descripcion_competicion'][$i]."\";";	
+							}
+					?>
 
 					$(".mostrar_competiciones").append("<div class=\"row\">");
 					for (i = 0; i < <?php echo $_SESSION['NumCompeticiones']; ?>; i++) { 
@@ -210,7 +362,8 @@
 							"<div class=\"thumbnail\">" +
 								"<div class=\"caption\">" +
 									"<h4 class=\"centrar-texto\">" + nom_competicion[i] + "  Pruebas: " + num_pruebas[i] + "</h4>" +
-									"<p>Descripción competición</p>" +
+									"<p>" + descripcion_competicion[i] + "</p>" +
+									"<div class=\"centrar-texto\">Comienza: " + fecha_inicio[i] + " Finaliza: " + fecha_fin[i] + "</div>" +
 									"<form class=\"form-inline subirfichero\" enctype=\"multipart/form-data\" action=\"subirfichero.php\" method=\"POST\">" +
   										"<div class=\"form-group " + nom_competicion[i] + "\">" +
     										"<label>Envío archivos</label>" +
@@ -315,11 +468,11 @@
 	# Muestra todas las puntuaciones de cada competición.
 	function mostrar_puntuaciones()
 	{
-		if ($_SESSION['NumCompeticiones'] == 0) {
+		if ($_SESSION['NumPuntuaciones'] == 0) {
 			# Codigo JS para mostrar competiciones.
 			echo "<script type=\"text/JavaScript\">"; ?>
 				$(document).ready(function(){
-			    	$(".mostrar_puntuaciones").append("<h4 class=\"centrar-texto\">NO EXISTEN COMPETICIONES</h4>");
+			    	$(".mostrar_puntuaciones").append("<h4 class=\"centrar-texto\">NO HAY PUNTUACIONES QUE MOSTRAR</h4>");
 	      		});
 	      	<?php echo "</script>";
 		}
@@ -377,11 +530,11 @@
 	# Muestra las puntuaciones obtenidas en cada una de las pruebas en las que ha participado el usuario.
 	function mostrar_mispuntuaciones()
 	{
-		if ($_SESSION['NumCompeticionesUsuario'] == 0) {
+		if ($_SESSION['NumPuntuacionesUsuario'] == 0) {
 			# Codigo JS para mostrar competiciones.
 			echo "<script type=\"text/JavaScript\">"; ?>
 				$(document).ready(function(){
-			    	$(".mostrar_mispuntuaciones").append("<h4 class=\"centrar-texto\">NO EXISTEN PUNTUACIONES</h4>");
+			    	$(".mostrar_mispuntuaciones").append("<h4 class=\"centrar-texto\">NO HAY PUNTUACIONES QUE MOSTRAR</h4>");
 	      		});
 	      	<?php echo "</script>";
 		}
@@ -419,6 +572,76 @@
 						}
 			    	}
 			    	$(".mostrar_mispuntuaciones").append("</div>");
+	      		});
+	      	<?php echo "</script>";
+		}
+	}
+
+	# Muestra los datos de todas las competiciones.
+	function datos_competiciones()
+	{
+		if ($_SESSION['NumCompeticiones'] == 0) {
+			# Codigo JS para mostrar competiciones.
+			echo "<script type=\"text/JavaScript\">"; ?>
+				$(document).ready(function(){
+			    	$(".administrar_competicion").append("<h4 class=\"centrar-texto\">NO EXISTEN COMPETICIONES</h4>");
+	      		});
+	      	<?php echo "</script>";
+		}
+		else
+		{
+			# Recorremos array PHP para introducir datos en administrarcompeticion.html con JS.
+			echo "<script type=\"text/JavaScript\">"; ?>
+				$(document).ready(function(){
+					<!-- json_encode(): funcion para convertir array PHP en array JS -->
+					var nom_competicion = <?php echo json_encode($_SESSION['nom_competicion']); ?>;
+					var num_pruebas = <?php echo json_encode($_SESSION['num_pruebas']); ?>;
+					var fecha_inicio = [];
+					var fecha_fin = [];
+					var descripcion_competicion = [];
+					<?php 	for ($i = 0; $i < $_SESSION['NumCompeticiones']; $i++)
+							{	
+								echo "fecha_inicio[".$i."] = \"".$_SESSION['fecha_inicio'][$i]."\";";
+								echo "fecha_fin[".$i."] = \"".$_SESSION['fecha_fin'][$i]."\";";
+								echo "descripcion_competicion[".$i."] = \"".$_SESSION['descripcion_competicion'][$i]."\";";	
+							}
+					?>
+
+					$(".administrar_competicion").prepend(
+					"<div class=\"row elegircompeticion\">" +
+						"<div class=\"form-group col-xs-offset-1 col-xs-10 col-sm-offset-2 col-sm-8 col-md-offset-2 col-md-8 col-lg-offset-2 col-lg-8\">" +
+					    "<label>Competiciones:</label>" +
+					    "<select name=\"competiciones\" id=\"competiciones\" class=\"form-control\">"					
+					);
+					for (i = 0; i < <?php echo $_SESSION['NumCompeticiones']; ?>; i++) { 
+			    		$("#competiciones").append(
+			    			"<option value=\""+ nom_competicion[i] + "\">" + nom_competicion[i] + "</option>"	
+						);
+			    	}
+			    	$(".elegircompeticion").append(
+			    		"</select>" + 
+			    			"</div>" +
+			    			"<div class=\"col-xs-offset-1 col-xs-10 col-sm-offset-2 col-sm-8 col-md-offset-2 col-md-8 col-lg-offset-2 col-lg-8\">" + 
+			    			"<button type=\"button\" id=\"btn-modificar\" class=\"btn btn-warning btn-block\" data-toggle=\"collapse\"" +
+			    				"data-target=\"#modificarCompeticion\" aria-expanded=\"false\" aria-controls=\"modificarCompeticion\">Modificar</button>" +
+			    			"</div>" +
+			    	"</div>"
+			   		);
+
+			   		$("#modificarCompeticion").on('show.bs.collapse', function(){
+						var pos = nom_competicion.indexOf($("#competiciones").val());
+						var descripcion = descripcion_competicion[pos].replace(/<\/br>/g, "\r\n");
+						$("#nombrecompeticion").val(nom_competicion[pos]);
+						$("#numpruebas").val(num_pruebas[pos]);
+						$("#fechainicio").val(fecha_inicio[pos]);
+						$("#fechafin").val(fecha_fin[pos]);
+						$("#descripcion").val(descripcion);
+						$("#competiciones").attr("disabled", "true");
+						$("#regfinal").prepend("<input type=\"hidden\" name=\"nombrecompeticioninicial\" value=\""+ nom_competicion[pos] + "\" />");
+					});
+					$("#modificarCompeticion").on('hidden.bs.collapse', function(){
+						$("#competiciones").removeAttr("disabled");
+					});
 	      		});
 	      	<?php echo "</script>";
 		}

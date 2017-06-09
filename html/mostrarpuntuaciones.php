@@ -1,9 +1,12 @@
 <?php
+	header('Content-Type: text/html; charset=utf-8');
+
 	include_once ("../include/inicia_ses.inc.php"); 	# Usamos sesion activa para obtener datos.
 	include_once ("../include/datos.inc.php");  		# Incluimos datos básicos de la BBDD.
 
 	// Crear conexión
 	$c = new mysqli($_SESSION['servidor'], $_SESSION['login'], $_SESSION['pass'], $_SESSION['BBDD']);
+	$c->set_charset('utf8');
 	// Comprobar conexión
 	if ($c->connect_error){
 		$_SESSION['BBDDError'] = "Conexión fallida: " . $c->connect_error;
@@ -50,6 +53,9 @@
 				}
 				array_push($_SESSION['DatosCompeticion'][$cont], $fila["nom_competicion"], $existepuntuacion->num_rows, $nom_usuario, $puntuacion_total);
 			}
+			$_SESSION['NumPuntuaciones'] = $existepuntuacion->num_rows;
+			$existepuntuacion->free();
+			
 			$cont++;
 		}
 	}
@@ -58,7 +64,6 @@
 	$c->close();
 
 	$existecompeticion->free();
-	$existepuntuacion->free();
 
 	header('Location: puntuaciones.html');
 ?>

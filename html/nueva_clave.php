@@ -1,4 +1,6 @@
 <?php
+	header('Content-Type: text/html; charset=utf-8');
+
 	require ("../include/inicia_ses.inc.php");
 	require '../PHPMailer/PHPMailerAutoload.php';
 	include_once ("../include/datos.inc.php"); 		# Incluimos datos básicos de la BBDD.
@@ -7,6 +9,7 @@
 
 	// Crear conexión
 	$c = new mysqli($_SESSION['servidor'], $_SESSION['login'], $_SESSION['pass'], $_SESSION['BBDD']);
+	$c->set_charset('utf8');
 	// Comprobar conexión
 	if ($c->connect_error){
 		$_SESSION['OKcorreo'] = 0;

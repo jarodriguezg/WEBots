@@ -55,6 +55,11 @@ ul>li>a:hover 	{ color: #003300; }
 			  	  		  background-color: #007429;
 						}
 
+#usuario	{
+	color: white !important;
+	padding: 0px 20px;
+}
+
 .dropdown-menu	{ background-color: #003300 !important; }
 .dropdown-menu > li 	{ text-align: right; }
 .dropdown-menu > li > a { color: white !important; }
