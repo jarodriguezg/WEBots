@@ -32,24 +32,27 @@
 	}
 
 	# Condiciones para comprobar que datos ha introducido el usuario (datos a modificar).
-	if ($_POST['nombreusuario'] != ""){
-		$actualiza_nombreusuario = $c->query("UPDATE ".$_SESSION['usuarios']." 
-		SET nom_usuario='".$_POST['nombreusuario']."' WHERE (email='".$_SESSION['correo']."')");
-		$_SESSION['NombreUsuario'] = $_POST['nombreusuario'];
-	}
 	if ($_POST['nombre'] != ""){
 		$actualiza_nombre = $c->query("UPDATE ".$_SESSION['usuarios']." 
-		SET nombre='".$_POST['nombre']."' WHERE (email='".$_SESSION['correo']."')");
+		SET nombre='".$_POST['nombre']."' WHERE (nom_usuario='".$_SESSION['NombreUsuario']."')");
 	}
 
 	if ($_POST['apellido'] != ""){
 		$actualiza_apellido = $c->query("UPDATE ".$_SESSION['usuarios']." 
-		SET apellido='".$_POST['apellido']."' WHERE (email='".$_SESSION['correo']."')");
+		SET apellido='".$_POST['apellido']."' WHERE (nom_usuario='".$_SESSION['NombreUsuario']."')");
 	}
 
 	if ($_POST['clave'] != ""){
 		$actualiza_clave = $c->query("UPDATE ".$_SESSION['usuarios']." 
-		SET clave='".$_POST['clave']."' WHERE (email='".$_SESSION['correo']."')");
+		SET clave='".password_hash($_POST['clave'], PASSWORD_DEFAULT)."' WHERE (nom_usuario='".$_SESSION['NombreUsuario']."')");
+	}
+	if ($_POST['nombreusuario'] != ""){
+		$actualiza_nombreusuario = $c->query("UPDATE ".$_SESSION['usuarios']." 
+		SET nom_usuario='".$_POST['nombreusuario']."' WHERE (nom_usuario='".$_SESSION['NombreUsuario']."')");
+		$c->query("UPDATE ".$_SESSION['pruebas']." SET nom_usuario='".$_POST['nombreusuario']."' WHERE (nom_usuario='".$_SESSION['NombreUsuario']."')");
+		$c->query("UPDATE ".$_SESSION['puntuaciones']." SET nom_usuario='".$_POST['nombreusuario']."' WHERE (nom_usuario='".$_SESSION['NombreUsuario']."')");
+		$ultimalinea = system('cd /var/www/WEBots/competiciones/ && mv '.$_SESSION['NombreUsuario'].' '.$_POST['nombreusuario'].'');
+		$_SESSION['NombreUsuario'] = $_POST['nombreusuario'];
 	}
 
 	# Modificar datos de tabla Usuarios.

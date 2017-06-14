@@ -17,7 +17,7 @@
 	# Condiciones para comprobar que datos ha introducido el usuario (datos a modificar).
 	if ($_POST['clave'] != ""){
 		$actualiza_clave = $c->query("UPDATE ".$_SESSION['usuarios']." 
-		SET clave='".$_POST['clave']."' WHERE (email='".$_SESSION['correo']."')");
+		SET clave='".password_hash($_POST['clave'], PASSWORD_DEFAULT)."' WHERE (email='".$_SESSION['correo']."')");
 	}
 
 	# Modificar datos de tabla Usuarios.

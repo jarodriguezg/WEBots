@@ -4,7 +4,6 @@
 
 	# Incluimos variables para usar en archivos posteriores.
 	if (isset($_POST['correo'])){	$_SESSION['correo'] = $_POST['correo'];	}
-	# ¿Encriptar clave?
 	if (isset($_POST['clave'])){	$_SESSION['clave'] = $_POST['clave']; 	}
 	else { unset($_SESSION['clave']); }
 
@@ -19,8 +18,13 @@
 
 	# Usuario valido registrado en el sistema (correo y clave coinciden).
 	if (isset($_SESSION['clave'])){
-		$existeusuario = $c->query("SELECT nombre FROM ".$_SESSION['usuarios']."
-			WHERE (email='".$_SESSION['correo']."') AND (clave='".$_SESSION['clave']."')");
+		$existeusuario = $c->query("SELECT clave FROM ".$_SESSION['usuarios']."
+			WHERE (email='".$_SESSION['correo']."') ");
+		if ($existeusuario->num_rows == 1)
+		{
+			$fila = $existeusuario->fetch_assoc();
+			if (password_verify($_SESSION['clave'], $fila["clave"])) {	$comprobarclave = 1;	}
+		}
 	}
 	else {
 		# Correo se encuentra registrado en el sistema.
@@ -38,15 +42,17 @@
 			# Prohibir acceso al registro del usuario: header('Location: ../html/registro.html');
 			$_SESSION['OKdatos'] = 1; 
 		}
-		else {	
+		else 
+		{	
 			$_SESSION['reginicial'] = 1; 
-			header('Location: ../html/registro.html');	}
+			header('Location: ../html/registro.html');	
+		}
 	}
 	# Si existe usuario válido (usuario-clave).
 	else if (isset($existeusuario))
 	{	
 		# Comprobamos que la consulta devuelve algún valor (indicativo de que Usuario existe en BBDD).
-		if ($existeusuario->num_rows == 1){	header('Location: ../html/procesa_acceso.php');	}
+		if ($comprobarclave == 1){	header('Location: ../html/procesa_acceso.php');	}
 		else { $_SESSION['OKdatos'] = 2; }	# Consulta sin resultados, usuario introducido no existe en BBDD.
 	}
 	/* else

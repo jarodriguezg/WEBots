@@ -8,7 +8,9 @@ $(document).ready(function(){
 	var fechaactual = new Date();
 
 	if (fechaactual.getDate() < 10){ dia = "0" + fechaactual.getDate();	}
+	else { dia = fechaactual.getDate(); }
 	if ((fechaactual.getMonth()+1) < 10){ mes = "0" + (fechaactual.getMonth()+1); }
+	else { mes = (fechaactual.getMonth()+1); }
 	anio = fechaactual.getFullYear();
 
 	$("#regfinal").submit(function(){

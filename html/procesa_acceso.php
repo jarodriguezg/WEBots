@@ -17,11 +17,8 @@
 		}
 	
 		# Obtener datos de tabla usuarios
-		$usuario = 	$c->query("SELECT * FROM ".$_SESSION['usuarios']." 
-					WHERE (email = '".$_SESSION['correo']."' AND clave = '".$_SESSION['clave']."')");
+		$usuario = 	$c->query("SELECT * FROM ".$_SESSION['usuarios']." WHERE (email = '".$_SESSION['correo']."')");
 
-		# Eliminamos variable con la contraseña del usuario por seguridad.
-		unset($_SESSION['clave']);
 		# Cerrar conexión
 		$c->close();
 

@@ -2,8 +2,6 @@
 	# Propagación de sesiones
 	include_once ("include/inicia_ses.inc.php");
 	include_once ("include/acceso.inc.php");
-
-	estado_registro();
 ?>
 
 <!DOCTYPE html>
@@ -31,7 +29,8 @@
 </head>
 
 <body>
-	<?php 	validar_datosacceso();
+	<?php 	estado_registro();
+			validar_datosacceso();
 			acceso_usuario(); ?>
 	<div id="header">
 		<div class="container-fluid">
@@ -104,8 +103,27 @@
 							col-sm-offset-1 col-sm-10 
 							col-md-offset-2 col-md-8
 							col-lg-offset-2 col-lg-8">
+							<h3 id="titulo-ppal" class="centrar-texto">En esta WEB podrás participar en diferentes competiciones para medir la eficiencia de tus algoritmos de ordenación.</h3>
+							<p>El funcionamiento de las competiciones es muy sencillo, cada competición contiene una descripción y un número de pruebas. </br>
+							El usuario deberá aportar para cada prueba una o varias funciones en un fichero de cabecera (.h), de las cuales habrá una que sea la principal (contenedora del algoritmo de ordenación).
+							<p>Ejemplo básico de fichero (nombrefichero.h): </p>
+							<pre>
+// Inclusión de bibliotecas necesarias para implementacion (Por ejemplo: #include &lt;iostream&gt;)
+
+using namespace std;
+
+// Algoritmo aportado por el usuario.
+
+template &lt;typename Iter&gt;			// Función recibe cualquier tipo de dato.
+void medireficiencia(Iter a, Iter b)		// Funcion principal (SIEMPRE deberá llamarse medireficiencia)
+{
+    // Código desarrollado por el usuario.
+}
+
+// Otras Funciones
+							</pre>
 					<h2 class="centrar-texto">MODELO DE JUEGO: <em>Algoritmos de ordenación</em></h2>
-					<p>Una vez finalizada la competición se visualizarán en pantalla los resultados, dichos resultados se almacenarán en un registro de tus competiciones que podrás analizar posteriormente.</p>
+					<p>Una vez finalizada la participación se visualizarán en pantalla los resultados, dichos resultados se almacenarán en un registro de tus competiciones que podrás analizar posteriormente.</p>
 					<p>El proceso para comprobar la eficiencia del algoritmo consiste en realizar la ejecución del siguiente fragmento de código:</p>
 <pre>
 <b>#include "algoritmo.h"		// Fichero proporcionado por el usuario. </b>

@@ -18,7 +18,7 @@
 	}
 
 	# Comprobamos que el correo se encuentra en la BBDD.
-	$existecorreo = $c->query("SELECT nombre FROM ".$_SESSION['usuarios']."
+	$existecorreo = $c->query("SELECT clave FROM ".$_SESSION['usuarios']."
 			WHERE (email='".$_SESSION['correo']."')");
 
 	# Correo se encuentra registrado en la BBDD (existe una fila como resultado de la consulta).
@@ -99,7 +99,7 @@
 
 		    # Modificar clave dentro de la tabla Usuario.
 			$c->query("UPDATE ".$_SESSION['usuarios']." 
-			SET clave='".$clave."' WHERE (email='".$_SESSION['correo']."')");
+			SET clave='".password_hash($clave, PASSWORD_DEFAULT)."' WHERE (email='".$_SESSION['correo']."')");
 		}
 	}
 	else

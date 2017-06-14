@@ -32,6 +32,7 @@
 				});
 			<?php echo "</script>";
 			unset($_SESSION['OKdatos']);
+			unset($_SESSION['clave']);
 		}
 	}
 
@@ -400,7 +401,9 @@
 
 					var fechaactual = new Date();
 					if (fechaactual.getDate() < 10){ dia = "0" + fechaactual.getDate();	}
+					else { dia = fechaactual.getDate(); }
 					if ((fechaactual.getMonth()+1) < 10){ mes = "0" + (fechaactual.getMonth()+1); }
+					else { mes = (fechaactual.getMonth()+1);}
 					anio = fechaactual.getFullYear();
 
 					for (i = 0; i < <?php echo $_SESSION['NumCompeticiones']; ?>; i++) { 
@@ -474,7 +477,7 @@
 				# Codigo JS para cambiar el btn-file.
 				echo "<script type=\"text/JavaScript\">"; ?>
 					$(document).ready(function(){
-			    		$(".btn-file").css("width","138px");
+			    		$(".btn-file").css("width","100px");
 	      			});
 	      		<?php echo "</script>";
 	      	}
@@ -483,7 +486,7 @@
 				# Codigo JS para cambiar el btn-file.
 				echo "<script type=\"text/JavaScript\">"; ?>
 					$(document).ready(function(){
-			    		$(".btn-file").css("width","138px");
+			    		$(".btn-file").css("width","100px");
 	      			});
 	      		<?php echo "</script>";
 	      	}
@@ -492,20 +495,11 @@
 				# Codigo JS para cambiar el btn-file.
 				echo "<script type=\"text/JavaScript\">"; ?>
 					$(document).ready(function(){
-			    		$(".btn-file").css("width","138px");
+			    		$(".btn-file").css("width","100px");
 	      			});
 	      		<?php echo "</script>";
 	      	}
 			elseif(strpos($user_agent, 'Chrome') !== FALSE)
-			{	
-				# Codigo JS para cambiar el btn-file.
-				echo "<script type=\"text/JavaScript\">"; ?>
-					$(document).ready(function(){
-			    		$(".btn-file").css("width","138px");
-	      			});
-	      		<?php echo "</script>";
-	      	}
-			elseif(strpos($user_agent, 'Safari') !== FALSE)
 			{	
 				# Codigo JS para cambiar el btn-file.
 				echo "<script type=\"text/JavaScript\">"; ?>
@@ -672,7 +666,7 @@
 		}
 	}
 
-	# Muestra los datos de todas las competiciones.
+	# Muestra los datos de todas las competiciones. (administrar competiciones)
 	function datos_competiciones()
 	{
 		if ($_SESSION['NumCompeticiones'] == 0) {
@@ -728,6 +722,13 @@
 						var descripcion = descripcion_competicion[pos].replace(/<\/br>/g, "\r\n");
 
 						// Obtenemos datos de cada fecha introducida para realizar comprobaciones.
+						var fechaactual = new Date();
+						if (fechaactual.getDate() < 10){ dia = "0" + fechaactual.getDate();	}
+						else { dia = fechaactual.getDate(); }
+						if ((fechaactual.getMonth()+1) < 10){ mes = "0" + (fechaactual.getMonth()+1); }
+						else { mes = (fechaactual.getMonth()+1);}
+						anio = fechaactual.getFullYear();
+
 						var diafechainicio = fecha_inicio[pos].substring(0,2);
 						var diafechafin = fecha_fin[pos].substring(0,2);
 						var mesfechainicio = fecha_inicio[pos].substring(3,5);
@@ -743,30 +744,35 @@
 						$("#competiciones").attr("disabled", "true");
 						$("#regfinal").prepend("<input type=\"hidden\" name=\"nombrecompeticioninicial\" value=\""+ nom_competicion[pos] + "\" />");
 
-						// Competición EMPEZADA.
+						// Competición EMPEZADA sin finalizar.
 						if ((aniofechainicio < anio) || (aniofechainicio == anio && mesfechainicio < mes) || (aniofechainicio == anio && mesfechainicio == mes && diafechainicio <= dia))
 						{							
 							$(".alert-info").after(
 							"<div class=\"alert alert-warning\">" +
 								"<p><strong>" + nom_competicion[pos] + " -</strong> Competición COMENZADA, sólo se permite modificar Fecha Fin y Descripción.</p>" +
 							"</div>");
+							$("#nombrecompeticion").val("");
 							$("#nombrecompeticion").attr("disabled", "true");
+							$("#nombrecompeticion").attr("placeholder", nom_competicion[pos]);
 							$("#numpruebas").attr("disabled", "true");
+							$("#fechainicio").val("");
 							$("#fechainicio").attr("disabled", "true");
+							$("#fechainicio").attr("placeholder", fecha_inicio[pos]);
 							$(":reset").remove();
 						}
-						// Competición FINALIZADA.
+						// Competición EMPEZADA Y FINALIZADA.
 						if ((aniofechafin < anio) || (aniofechafin == anio && mesfechafin < mes) || (aniofechafin == anio && mesfechafin == mes && diafechafin < dia))
 						{
 							$(".alert-warning").remove();
 							$(".alert-info").after(
-							"<div class=\"alert alert-warning\">" +
+							"<div class=\"alert alert-warning centrar-texto\">" +
 								"<p><strong>" + nom_competicion[pos] + " -</strong> Competición FINALIZADA, NO MODIFICABLE.</p>" +
 							"</div>");
-							$("#nombrecompeticion").attr("disabled", "true");
-							$("#numpruebas").attr("disabled", "true");
-							$("#fechainicio").attr("disabled", "true");
+							$(".alert-info").remove();
+							$(".alert-danger").remove();
+							$("#fechafin").val("");
 							$("#fechafin").attr("disabled", "true");
+							$("#fechafin").attr("placeholder", fecha_fin[pos]);
 							$("#descripcion").attr("disabled", "true");
 							$(".btn-guardar").attr("disabled", "true");
 							$(":reset").remove();
@@ -774,6 +780,12 @@
 					});
 					$("#modificarCompeticion").on('hidden.bs.collapse', function(){
 						$("#competiciones").removeAttr("disabled");
+						$("#nombrecompeticion").removeAttr("disabled");
+						$("#numpruebas").removeAttr("disabled");
+						$("#fechainicio").removeAttr("disabled");
+						$("#fechafin").removeAttr("disabled");
+						$("#descripcion").removeAttr("disabled");
+						$(".btn-guardar").removeAttr("disabled");
 						$(".alert-warning").remove();
 					});
 	      		});

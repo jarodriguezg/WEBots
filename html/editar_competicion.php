@@ -54,7 +54,6 @@
 		}
 		else {	$_SESSION['OKeditarcompeticion'] = 2;	header('Location: datoscompeticiones.php'); exit(); }
 	}
-	
 
 	if ($_POST['numpruebas'] != ""){
 		$actualiza_numpruebas = $c->query("UPDATE ".$_SESSION['competiciones']." 
@@ -77,7 +76,7 @@
 		{
 			while ($fila = $usuarios->fetch_array())
 			{
-				$ultimalinea = system('cd /var/www/WEBots/competiciones/'.$fila["nom_usuario"].'/ && ls -l && mv '.$_POST['nombrecompeticioninicial'].' '.$_POST['nombrecompeticion'].'');
+				$ultimalinea = system('cd /var/www/WEBots/competiciones/'.$fila["nom_usuario"].'/ && mv '.$_POST['nombrecompeticioninicial'].' '.$_POST['nombrecompeticion'].'');
 			}
 		}
 	}

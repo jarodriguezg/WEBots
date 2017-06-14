@@ -34,7 +34,7 @@
 
 	# Insertar datos en tabla usuarios
 	if ($c->query("INSERT INTO ".$_SESSION['usuarios']." (email, nom_usuario, nombre, apellido, clave) 
-		VALUES ('".$_SESSION['correo']."', '".$_POST['nombreusuario']."','".$_POST['nombre']."', '".$_POST['apellido']."', '".$_POST['clave']."')"))
+		VALUES ('".$_SESSION['correo']."', '".$_POST['nombreusuario']."','".$_POST['nombre']."', '".$_POST['apellido']."', '".password_hash($_POST['clave'], PASSWORD_DEFAULT)."')"))
 	{	
 		# Variable para comprobar que el registro del usuario ha sido un éxito.
 		# Se usa para mostrar mensaje éxito en página ppal.
