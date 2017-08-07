@@ -26,8 +26,14 @@
 	{		
 		# Generar clave aleatoria (10 caracteres, MAY-min-num) - 62 elementos.
 		$cad = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+		$may = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		$min = "abcdefghijklmnopqrstuvwxyz";
+		$num = "1234567890";
 		$clave = "";
-		for ($i=0; $i<10; $i++) {	$clave .= substr($cad, rand(0, 62), 1);		}
+		$clave .= substr($may, rand(0, 25), 1);
+		$clave .= substr($min, rand(0, 25), 1);
+		$clave .= substr($num, rand(0, 9), 1);
+		for ($i=0; $i<6; $i++) {	$clave .= substr($cad, rand(0, 61), 1);		}
 		# Fin generación clave.
 
 		# Envío de correo con información necesaria para restablecer clave.

@@ -6,17 +6,14 @@ $(document).ready(function(){
 
 	if (fechaactual.getDate() < 10){ dia = "0" + fechaactual.getDate();	}
 	else { dia = fechaactual.getDate(); }
-	var dia2 = fechaactual.getDate() + 7;
-	if (dia2 < 10){ dia2 = "0" + dia2;	}
 	if ((fechaactual.getMonth()+1) < 10){ mes = "0" + (fechaactual.getMonth()+1); }
 	else { mes = (fechaactual.getMonth()+1); }
 	anio = fechaactual.getFullYear();
 
 	var hoy = dia + "/" + mes + "/" + anio;
-	var semanasig = dia2 + "/" + mes + "/" + anio;
 
 	$("#fechainicio").attr("value", hoy);
-	$("#fechafin").attr("value", semanasig);
+	$("#fechafin").attr("value", hoy);
 
 	$("#regfinal").submit(function(){
 		// Eliminamos mensajes de alerta (Evitar adicción de más de uno).

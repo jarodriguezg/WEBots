@@ -148,7 +148,7 @@
 		}
 	}
 
-		# Editar usuario
+	# Editar competicion
 	function estado_editarcompeticion() {
 		if (isset($_SESSION['OKeditarcompeticion']))
 		{
@@ -199,6 +199,7 @@
 		}
 	}
 
+	# Estado restablecer contraseña
 	function estado_restablecerclave() {
 		if (isset($_SESSION['OKcorreo']))
 		{	
@@ -271,7 +272,7 @@
   							"<li><p id=\"usuario\"><em>Nombre Usuario: </em> <?php echo $_SESSION['NombreUsuario'] ?></p></li>" +
   							"<li role=\"separator\" class=\"divider\"></li>" +
     						"<li><a id=\"editarusuario\" href=\"/WEBots/html/cambiar_clave.html\">" +
-    						"<span class=\"glyphicon glyphicon-pencil\" aria-hidden=\"true\"></span> Cambiar Contraseña" +
+    						"<span class=\"glyphicon glyphicon-pencil\" aria-hidden=\"true\"></span> Editar Usuario" +
     						"</a></li>" +
     						"<li><a href=\"/WEBots/html/procesa_cierre.php\">" +
     						"<span class=\"glyphicon glyphicon-off\" aria-hidden=\"true\"></span> Cerrar Sesión" +
@@ -289,7 +290,6 @@
 					echo "<script type=\"text/JavaScript\">"; ?>
 						$(document).ready(function(){
 					    	$(".navbar-text").before("<ul class=\"nav navbar-nav\">" +
-		        			"<li><a href=\"/WEBots/index.html\">Inicio<span class=\"sr-only\"></span></a></li>" +
 	 						"<li><a href=\"/WEBots/html/mostrarcompeticiones.php\">Competiciones</a></li>" +
 	  						"<li><a href=\"/WEBots/html/mostrarpuntuaciones.php\">Puntuaciones</a></li>" +
 		      				"</ul>");
@@ -337,7 +337,7 @@
 			# Codigo JS para mostrar competiciones.
 			echo "<script type=\"text/JavaScript\">"; ?>
 				$(document).ready(function(){
-			    	$(".mostrar_competiciones").append("<h4 class=\"centrar-texto\">NO EXISTEN COMPETICIONES</h4>");
+			    	$(".mostrar_competiciones").append("<h4 class=\"centrar-texto\">NO HAY COMPETICIONES DISPONIBLES</h4>");
 	      		});
 	      	<?php echo "</script>";
 		}
@@ -406,6 +406,8 @@
 					else { mes = (fechaactual.getMonth()+1);}
 					anio = fechaactual.getFullYear();
 
+					var numcompeticiones = <?php echo $_SESSION['NumCompeticiones']?>;
+
 					for (i = 0; i < <?php echo $_SESSION['NumCompeticiones']; ?>; i++) { 
 			    		// Obtenemos datos de cada fecha introducida para realizar comprobaciones.
 						var diafechainicio = fecha_inicio[i].substring(0,2);
@@ -426,6 +428,9 @@
 						if ((aniofechafin < anio) || (aniofechafin == anio && mesfechafin < mes) || (aniofechafin == anio && mesfechafin == mes && diafechafin < dia))
 						{
 							$("#Bloque" + nom_competicion[i] + "").remove();
+							numcompeticiones--;
+							if (numcompeticiones == 0)
+							{	$(".mostrar_competiciones").append("<h4 class=\"centrar-texto\">NO HAY COMPETICIONES DISPONIBLES</h4>");	}
 						}
 			    	}
 	      		});
@@ -666,7 +671,7 @@
 		}
 	}
 
-	# Muestra los datos de todas las competiciones. (administrar competiciones)
+	# Muestra los datos de todas las competiciones. (Administrar Competiciones)
 	function datos_competiciones()
 	{
 		if ($_SESSION['NumCompeticiones'] == 0) {

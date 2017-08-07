@@ -44,6 +44,7 @@
 				array_push($_SESSION['DatosCompeticion'][$cont], $fila["nom_competicion"], $existepuntuacion->num_rows);
 			}
 			else {	
+				$_SESSION['NumPuntuacionesUsuario'] = $existepuntuacion->num_rows;
 				$num_prueba = array();
 				$nom_fichero = array();
 				$puntuacion_prueba = array();
@@ -56,12 +57,10 @@
 				}
 				array_push($_SESSION['DatosCompeticion'][$cont], $fila["nom_competicion"], $existepuntuacion->num_rows, $num_prueba, $nom_fichero, $puntuacion_prueba);
 			}
-			$_SESSION['NumPuntuacionesUsuario'] = $existepuntuacion->num_rows;
 			$existepuntuacion->free();
 			$cont++;
 		}
 	}
-
 	
 	# Cerrar conexión
 	$c->close();

@@ -55,7 +55,6 @@
 			}
 			$_SESSION['NumPuntuaciones'] = $existepuntuacion->num_rows;
 			$existepuntuacion->free();
-			
 			$cont++;
 		}
 	}

@@ -3,6 +3,7 @@ function comprobar_datos()
 	$("#reginicial").submit(function(){
 		// Evitar redundancia mensajes.
 		$(".alert-warning").remove();
+		$(".alert-danger").remove();
 		var correo = $("#correo").val();
 		var clave = $("#clave").val();
 
@@ -41,11 +42,40 @@ function comprobar_datos()
 							   		"</div>");
 				return false;
 			}
+
+			if(clave.length < 8)
+			{
+				$("#clave").select();
+				$("#clave").after("<div class=\"alert alert-warning\">" +
+								  "<strong>Contraseña -</strong> Contiene menos de 8 caracteres" +
+							   	  "</div>");
+				return false;
+			}
+			else // Contraseña de 8 o más caracteres.
+			{	
+				// Expresion regular(al menos una MAY, una min, y un número).
+				var expmay = /[A-Z]+/;
+				var expmin = /[a-z]+/;
+				var expnum = /[0-9]+/;
+
+				// Comprobamos que la clave cumpla precondiciones.
+				if ((expmay.test(clave) && expmin.test(clave) && expnum.test(clave)) == 1)
+				{ return true; }
+				else
+				{
+					$("#clave").select();
+					$("#clave").after("<div id=\"condiciones\" class=\"alert alert-danger\">" +
+							   	   	   "<strong>Contraseña -</strong> No cumple condiciones" +
+							   	   	   "</div>");
+					return false;
+				}
+			}
 		}
 	});
 	// Eliminar mensajes de error al cerrar VModal.
 	$("#VModal").on('hidden.bs.modal', function(){
 		$(".alert-warning").remove();
+		$(".alert-danger").remove();
 	})
 }
 

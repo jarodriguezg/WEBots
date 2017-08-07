@@ -14,18 +14,20 @@
 		die();
 	}
 
+	# Consulta previa para conocer los usuarios que han participado en la competición para eliminar las carpetas creadas previamente.
+	$usuarios = $c->query("SELECT nom_usuario FROM ".$_SESSION['puntuaciones']." WHERE nom_competicion = '".$_POST['nombrecompeticioninicial']."'");
+
 	# Eliminar competición de la tabla competiciones, pruebas de la competición, y puntuaciones relacionadas.
-	if ($c->query("DELETE FROM ".$_SESSION['competiciones']." WHERE ".$_SESSION['competiciones'].".nom_competicion='".$_POST['nombrecompeticion']."'") &&
-		$c->query("DELETE FROM ".$_SESSION['pruebas']." WHERE ".$_SESSION['pruebas'].".nom_competicion='".$_POST['nombrecompeticion']."'") &&
-		$c->query("DELETE FROM ".$_SESSION['puntuaciones']." WHERE ".$_SESSION['puntuaciones'].".nom_competicion='".$_POST['nombrecompeticion']."'"))
+	if ($c->query("DELETE FROM ".$_SESSION['competiciones']." WHERE ".$_SESSION['competiciones'].".nom_competicion='".$_POST['nombrecompeticioninicial']."'") &&
+		$c->query("DELETE FROM ".$_SESSION['pruebas']." WHERE ".$_SESSION['pruebas'].".nom_competicion='".$_POST['nombrecompeticioninicial']."'") &&
+		$c->query("DELETE FROM ".$_SESSION['puntuaciones']." WHERE ".$_SESSION['puntuaciones'].".nom_competicion='".$_POST['nombrecompeticioninicial']."'"))
 	{	
 		# Borrar los ficheros almacenados en la carpeta con el nombre de la competición de los usuarios que han participado en ella.
-		$usuarios = $c->query("SELECT nom_usuario FROM ".$_SESSION['puntuaciones']." WHERE nom_competicion = '".$_POST['nombrecompeticion']."'");
 		if ($usuarios->num_rows > 0)
 		{
 			while ($fila = $usuarios->fetch_array())
 			{	
-				$ultimalinea = system('cd /var/www/WEBots/competiciones/'.$fila["nom_usuario"].'/ && rm -r '.$_POST['nombrecompeticion'].'');
+				$ultimalinea = system('cd /var/www/WEBots/competiciones/'.$fila["nom_usuario"].'/ && rm -r '.$_POST['nombrecompeticioninicial'].'');
 			}
 		}
 		# Variable para comprobar que la eliminación de la competición ha sido un éxito.

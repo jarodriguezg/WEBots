@@ -27,7 +27,7 @@ $(document).ready(function(){
 		var fechainicio = formulario.fechainicio.value;
 		var fechafin = formulario.fechafin.value;
 
-		if (nombrecompeticion == "" && descripcion == "" && fechainicio == "" && fechafin == "" && numpruebas == "")
+		if (nombrecompeticion == "" && descripcion == "" && fechainicio == "" && fechafin == "")
 		{
 			formulario.nombrecompeticion.select();
 			$(".alert-danger").after("<div class=\"alert alert-warning\">" +
@@ -70,8 +70,8 @@ $(document).ready(function(){
 			if (expregfecha.test(fechainicio) && expregfecha.test(fechafin))
 			{
 				if ((aniofechainicio < anio || aniofechafin < anio) || 
-					((aniofechainicio == anio && mesfechainicio < mes) || (aniofechainicio == anio && mesfechafin < mes)) ||
-					((aniofechainicio == anio && mesfechainicio == mes && diafechainicio < dia) || (aniofechainicio == anio && mesfechafin == mes && diafechafin < dia)))
+					((aniofechainicio == anio && mesfechainicio < mes) || (aniofechafin == anio && mesfechafin < mes)) ||
+					((aniofechainicio == anio && mesfechainicio == mes && diafechainicio < dia) || (aniofechafin == anio && mesfechafin == mes && diafechafin < dia)))
 				{
 					formulario.fechainicio.select();
 					$(".fecha").prepend("<div class=\"alert alert-warning\">" +
@@ -127,6 +127,38 @@ $(document).ready(function(){
 					return false;
 				}
 			}
+		}
+
+		if (fechainicio == "" && fechafin != "")
+		{
+			// Formato de Fecha por defecto. (dd/mm/aaaa)
+			expregfecha = /^(0[1-9]|[1-2][0-9]|3[0-1])(\/)([0][1-9]|[1][0-2])\2(\d{4})$/;
+
+			// Obtenemos datos de cada fecha introducida para realizar comprobaciones de que la fecha sea válida.
+			var diafechafin = fechafin.substring(0,2);
+			var mesfechafin = fechafin.substring(3,5);
+			var aniofechafin = fechafin.substring(6);
+
+			if (expregfecha.test(fechafin))
+			{
+				if ((aniofechafin < anio) || (aniofechafin == anio && mesfechafin < mes) || (aniofechafin == anio && mesfechafin == mes && diafechafin <= dia))
+				{
+					formulario.fechafin.select();
+					$(".fecha").prepend("<div class=\"alert alert-warning\">" +
+									  "<strong>Fecha -</strong> Fecha Fin anterior a la fecha actual" +
+								   	  "</div>");
+					return false;
+				}
+			}
+			else
+			{
+				formulario.fechafin.select();
+				$("#fechafin").after("<div class=\"alert alert-warning\">" +
+								  "<strong>Fecha Fin -</strong> Fecha NO válida" +
+							   	  "</div>");
+				return false;
+			}
+			
 		}
 		
 
