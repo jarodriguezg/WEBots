@@ -1,2 +1,2 @@
-# WEBots
-Aplicación WEB que enfrenta BOTS basados en la asignatura Diseño y Análisis de Algoritmos
+# WeBots
+Aplicación web que enfrenta bots basados en la asignatura Diseño y Análisis de Algoritmos
