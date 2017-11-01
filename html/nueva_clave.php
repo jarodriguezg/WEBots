@@ -47,14 +47,14 @@
 		//$mail->SMTPDebug = 2;                             // Enable verbose debug output
 
 		$mail->isSMTP();                                    // Set mailer to use SMTP
-		$mail->Host = 'smtp.live.com';  					// Specify main and backup SMTP servers
+		$mail->Host = 'smtp.office365.com';  					// Specify main and backup SMTP servers
 		$mail->SMTPAuth = true;                             // Enable SMTP authentication
 		$mail->Username = 'rodriguez_1_23@hotmail.com';     // SMTP username
-		$mail->Password = 'R0dr1gu3z19_9';                  // SMTP password
+		$mail->Password = 'JArodriguezG_9';                  // SMTP password
 		$mail->SMTPSecure = 'tls';                          // Enable TLS encryption, `ssl` also accepted
 		$mail->Port = 587;                                  // TCP port to connect to
 
-		$mail->setFrom('info@webots.com', 'WeBots');
+		$mail->setFrom('rodriguez_1_23@hotmail.com', 'WeBots');
 		$mail->addAddress($_SESSION['correo'], 'Usuario: ');
 		// $mail->addCC('cc@example.com');
 		// $mail->addBCC('bcc@example.com');

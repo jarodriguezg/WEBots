@@ -52,8 +52,8 @@
 					array_push($puntuacion_total, $filapunt["puntuacion_total"]);	
 				}
 				array_push($_SESSION['DatosCompeticion'][$cont], $fila["nom_competicion"], $existepuntuacion->num_rows, $nom_usuario, $puntuacion_total);
+				$_SESSION['NumPuntuaciones'] = $existepuntuacion->num_rows;
 			}
-			$_SESSION['NumPuntuaciones'] = $existepuntuacion->num_rows;
 			$existepuntuacion->free();
 			$cont++;
 		}

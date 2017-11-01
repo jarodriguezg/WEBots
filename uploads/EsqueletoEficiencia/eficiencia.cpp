@@ -7,7 +7,6 @@
 using namespace std;
 int main()
 {
-  srand(time(0));
   int n=0;
   while(n<20000||n==20000)
     {

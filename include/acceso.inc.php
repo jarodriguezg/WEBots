@@ -773,8 +773,6 @@
 							"<div class=\"alert alert-warning centrar-texto\">" +
 								"<p><strong>" + nom_competicion[pos] + " -</strong> Competición FINALIZADA, NO MODIFICABLE.</p>" +
 							"</div>");
-							$(".alert-info").remove();
-							$(".alert-danger").remove();
 							$("#fechafin").val("");
 							$("#fechafin").attr("disabled", "true");
 							$("#fechafin").attr("placeholder", fecha_fin[pos]);
